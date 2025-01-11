@@ -198,7 +198,7 @@ void loop() {
   }
 
   busServoFeedback();
-
+  statusFeedback();
   // sc.RegWritePos(254, bus_servo_middle, 0, 0);
   // sc.RegWriteAction();
   // delay(1000);

@@ -220,34 +220,32 @@ void busServoFeedback() {
   for(int i = 0; i < (sizeof(joint_id) / sizeof(joint_id[0])); i++){
     feedback_pos[i] = sc.ReadPos(joint_id[i]);
   }
-
-  jsonInfoHttp.clear();
-  jsonInfoHttp["T"] = FB_WAVEGO_STATUS;
-
-  jsonInfoHttp["LFA"] = feedback_pos[LF_A];
-  jsonInfoHttp["LFB"] = feedback_pos[LF_B];
-  jsonInfoHttp["LFH"] = feedback_pos[LF_H];
-
-  jsonInfoHttp["LHA"] = feedback_pos[LH_A];
-  jsonInfoHttp["LHB"] = feedback_pos[LH_B];
-  jsonInfoHttp["LHH"] = feedback_pos[LH_H];
-
-  jsonInfoHttp["RFA"] = feedback_pos[RF_A];
-  jsonInfoHttp["RFB"] = feedback_pos[RF_B];
-  jsonInfoHttp["RFH"] = feedback_pos[RF_H];
-
-  jsonInfoHttp["RHA"] = feedback_pos[RH_A];
-  jsonInfoHttp["RHB"] = feedback_pos[RH_B];
-  jsonInfoHttp["RHH"] = feedback_pos[RH_H];
-
-  String getInfoJsonString;
-  serializeJson(jsonInfoHttp, getInfoJsonString);
-  Serial.println(getInfoJsonString);
 }
 
 // wavego status feedback.
 void statusFeedback() {
-	
+  jsonInfoHttp.clear();
+  jsonInfoHttp["T"] = FB_WAVEGO_STATUS;
+
+  jsonInfoHttp["LFA"] = String((feedback_pos[LF_A] - servo_middle_pos[LF_A]) / 195.569572506687, 2);
+  jsonInfoHttp["LFB"] = String((feedback_pos[LF_B] - servo_middle_pos[LF_B]) / 195.569572506687, 2);
+  jsonInfoHttp["LFH"] = String((feedback_pos[LF_H] - servo_middle_pos[LF_H]) / 195.569572506687, 2);
+
+  jsonInfoHttp["LHA"] = String((feedback_pos[LH_A] - servo_middle_pos[LH_A]) / 195.569572506687, 2);
+  jsonInfoHttp["LHB"] = String((feedback_pos[LH_B] - servo_middle_pos[LH_B]) / 195.569572506687, 2);
+  jsonInfoHttp["LHH"] = String((feedback_pos[LH_H] - servo_middle_pos[LH_H]) / 195.569572506687, 2);
+
+  jsonInfoHttp["RFA"] = String((feedback_pos[RF_A] - servo_middle_pos[RF_A]) / 195.569572506687, 2);
+  jsonInfoHttp["RFB"] = String((feedback_pos[RF_B] - servo_middle_pos[RF_B]) / 195.569572506687, 2);
+  jsonInfoHttp["RFH"] = String((feedback_pos[RF_H] - servo_middle_pos[RF_H]) / 195.569572506687, 2);
+
+  jsonInfoHttp["RHA"] = String((feedback_pos[RH_A] - servo_middle_pos[RH_A]) / 195.569572506687, 2);
+  jsonInfoHttp["RHB"] = String((feedback_pos[RH_B] - servo_middle_pos[RH_B]) / 195.569572506687, 2);
+  jsonInfoHttp["RHH"] = String((feedback_pos[RH_H] - servo_middle_pos[RH_H]) / 195.569572506687, 2);
+
+  String getInfoJsonString;
+  serializeJson(jsonInfoHttp, getInfoJsonString);
+  Serial.println(getInfoJsonString);
 }
 
 // set the current pos as the middle pos.
@@ -255,4 +253,14 @@ void setBusServoMiddle() {
   for(int i = 0; i < (sizeof(joint_id) / sizeof(joint_id[0])); i++){
     servo_middle_pos[i] = feedback_pos[i];
   }
+}
+
+// move joint - input rad.
+void jointMoveRad(byte joint_id, double input_rad) {
+
+}
+
+// move joint - input ang.
+void jointMoveAng(byte joint_id, double input_ang) {
+
 }

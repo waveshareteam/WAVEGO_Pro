@@ -10,6 +10,31 @@ void jsonCmdReceiveHandler(){
 												RoArmM3_emergencyStopFlag = false;
 												break;
 
+	// WAVEGO ctrl.
+	case CMD_WAVEGO_TORQUE:
+												busServoTorque(
+												jsonCmdReceive["id"],
+												jsonCmdReceive["cmd"]);
+												break;
+	case CMD_SET_SERVO_MIDDLE:
+												setBusServoMiddle();
+												break;
+	case CMD_MOVE_JOINT_RAD:
+												jointMoveRad(
+												jsonCmdReceive["id"],
+												jsonCmdReceive["rad"]);
+												break;
+	case CMD_MOVE_JOINT_ANG:
+												jointMoveAng(
+												jsonCmdReceive["id"],
+												jsonCmdReceive["ang"]);
+												break;
+	case CMD_CHANGE_BUS_SERVO_ID:
+												changeBusServoID(
+												jsonCmdReceive["old"],
+												jsonCmdReceive["new"]);
+												break;
+
 
 	// it moves to goal position directly
 	// with interpolation.

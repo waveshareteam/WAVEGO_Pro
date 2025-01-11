@@ -9,8 +9,8 @@
 // ---===< WAVEGO ctrl. >===---
 #define FB_WAVEGO_STATUS 10
 
-// torque off: {"T":21,"cmd":0}
-// torque on: {"T":21,"cmd":1}
+// torque off: {"T":21,"id":254,"cmd":0}
+// torque on: {"T":21,"id":254,"cmd":1}
 #define CMD_WAVEGO_TORQUE 21
 
 // save the current pos as middle.
@@ -19,11 +19,15 @@
 
 // ctrl one joint.(input rad)
 // {"T":23,"joint":0,"rad":0}
-#define CMD_CTRL_JOINT_RAD 23
+#define CMD_MOVE_JOINT_RAD 23
 
 // ctrl one joint.(input angle)
 // {"T":24,"joint":0,"ang":0}
-#define CMD_CTRL_JOINT_RAD 24
+#define CMD_MOVE_JOINT_ANG 24
+
+// change the bus servo ID(WAVEGO Servo)
+// {"T":25,"old":0,"new":1}
+#define CMD_CHANGE_BUS_SERVO_ID 25
 
 
 
