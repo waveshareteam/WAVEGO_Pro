@@ -1,4 +1,5 @@
-// for PlatformIO
+// for PlatformIO. This is the main file of the project.
+// This file is the entry point of the program.
 #include <Arduino.h>
 
 // put function declarations here:
