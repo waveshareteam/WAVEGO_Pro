@@ -1,9 +1,6 @@
-#include <Arduino.h>
 #include "RGBLight.h"
-#include <Adafruit_NeoPixel.h>
-#include "PinConfig.h"
-
-#define RGB_NUM 2
+// #include <Adafruit_NeoPixel.h>
+#include "Config.h"
 
 RGBLight::RGBLight() : pixels(RGB_NUM, RGB_PIN, NEO_GRB + NEO_KHZ800) {
     // RGB Light initialized
