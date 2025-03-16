@@ -86,10 +86,6 @@ double linkage_f = 0;       // the distance between Hip and A/B in vertical plan
 
 
 // --- --- --- --- --- ---
-BodyCtrl::BodyCtrl() : sc() {
-    // Constructor
-}
-
 void BodyCtrl::init() {
     // Initialize BodyCtrl
     Serial1.begin(1000000, SERIAL_8N1, BUS_SERVO_RX, BUS_SERVO_TX);
@@ -118,5 +114,28 @@ int* BodyCtrl::getJointsZeroPosArray() {
 void BodyCtrl::setJointsZeroPosArray(int values[]) {
     for (int i = 0; i < 12; i++) {
         jointsZeroPos[i] = values[i];
+    }
+}
+
+int* BodyCtrl::getServoFeedback() {
+    jointsCurrentPos[0] = sc.ReadPos(LEG_LF_A);
+    jointsCurrentPos[1] = sc.ReadPos(LEG_LF_B);
+    jointsCurrentPos[2] = sc.ReadPos(LEG_LF_H);
+    jointsCurrentPos[3] = sc.ReadPos(LEG_LH_A);
+    jointsCurrentPos[4] = sc.ReadPos(LEG_LH_B);
+    jointsCurrentPos[5] = sc.ReadPos(LEG_LH_H);
+    jointsCurrentPos[6] = sc.ReadPos(LEG_RF_A);
+    jointsCurrentPos[7] = sc.ReadPos(LEG_RF_B);
+    jointsCurrentPos[8] = sc.ReadPos(LEG_RF_H);
+    jointsCurrentPos[9] = sc.ReadPos(LEG_RH_A);
+    jointsCurrentPos[10] = sc.ReadPos(LEG_RH_B);
+    jointsCurrentPos[11] = sc.ReadPos(LEG_RH_H);
+    return jointsCurrentPos;
+}
+
+void BodyCtrl::setCurrentPosZero() {
+    BodyCtrl::getServoFeedback();
+    for (int i = 0; i < 12; i++) {
+        jointsZeroPos[i] = jointsCurrentPos[i];
     }
 }

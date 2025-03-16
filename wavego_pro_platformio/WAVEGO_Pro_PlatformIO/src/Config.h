@@ -3,7 +3,7 @@
 #define RGB_PIN 26
 #define RGB_NUM 2
 
-// pin for the bus servo
+// config for the bus servo
 #define BUS_SERVO_RX 18
 #define BUS_SERVO_TX 19
 
@@ -45,8 +45,38 @@ static int InfoPrint = 1;
 // set joints zero pos array
 // {"T":105,"set":[512,512,512,512,512,512,512,512,512,512,512,512]}
 #define CMD_SET_JOINTS_ZERO 105
+// get the current pos of all servos
+// {"T":106}
+// feedback: {"T":-106,"fb":[512,512,512,512,512,512,512,512,512,512,512,512]}
+#define CMD_GET_CURRENT_POS 106
+// set the current pos as the zero pos
+// {"T":107}
+#define CMD_SET_CURRENT_POS_ZERO 107
+
 
 
 // JSON cmds: [T:201, set:[id, r, g, b]]
 // {"T":201,"set":[0,9,0,0]}
 #define CMD_SET_COLOR 201
+
+
+// scan files
+// {"T":300}
+#define CMD_SCAN_FILES 300
+// create mission
+// {"T":301,"name":"mission1","intro":"introduction for this mission file."}
+#define CMD_CREATE_MISSION 301
+// show the content of the mission
+// {"T":302,"name":"boot"}
+#define CMD_MISSION_CONTENT 302
+// append a new json cmd to the mission file
+// {"T":303,"name":"boot","json":"{\"T\":201,\"set\":[0,9,0,0]}"}
+#define CMD_APPEND_SETP_JSON 303
+#define CMD_INSERT_SETP_JSON 304
+#define CMD_REPLACE_SETP_JSON 305
+#define CMD_DELETE_SETP 306
+#define CMD_MOVE_TO_STEP 307
+#define CMD_RUN_MISSION 308
+// format flash (clear all)
+// {"T":399}
+#define CMD_FORMAT_FLASH 399
