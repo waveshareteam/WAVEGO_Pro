@@ -17,6 +17,12 @@ public:
     void createMission(String missionName, String content);
     void missionContent(String missionName);
     void appendStep(String missionName, String jsonCmd);
+    void insertStep(String missionName, int stepNum, String jsonCmd);
+    void replaceStep(String missionName, int stepNum, String jsonCmd);
+    void deleteStep(String missionName, int stepNum);
+    String readStep(String missionName, int stepNum);
+    void deleteMission(String missionName);
+    bool checkMission(String missionName);
 };
 
 #endif // FILES_CTRL_H

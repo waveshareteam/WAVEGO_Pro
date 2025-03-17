@@ -9,6 +9,7 @@
 
 JsonDocument jsonCmdReceive;
 JsonDocument jsonFeedback;
+DeserializationError err;
 String outputString;
 RGBLight led;
 BodyCtrl bodyCtrl;
@@ -16,22 +17,66 @@ FilesCtrl filesCtrl;
 
 int jointsZeroPos[12];
 int jointsCurrentPos[12];
+void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput);
+void runMission(String missionName, int intervalTime, int loopTimes);
 
 void setup() {
   Serial.begin(BAUD_RATE);
   Serial.println("device starting...");
 
   led.init();
-  led.setColor(0, 255, 0, 16); // id 0 -> left LED
-  led.setColor(1, 0, 32, 255); // id 1 -> right LED
-
   filesCtrl.init();
 
   bodyCtrl.init();
   bodyCtrl.jointMiddle();
+
+  if(!filesCtrl.checkMission("boot")) {
+    filesCtrl.createMission("boot", "this is the boot mission.");
+  }
+  runMission("boot", 0, 1);
 }
 
+bool runStep(String missionName, int step) {
+  outputString = filesCtrl.readStep(missionName, step);
+  err = deserializeJson(jsonCmdReceive, outputString);
+  if (err == DeserializationError::Ok) {
+    jsonCmdReceiveHandler(jsonCmdReceive);
+    return true;
+  } else {
+    Serial.print("JSON parsing error (this is a normal output when booting or running Mission): ");
+    Serial.println(err.c_str());
+    return false;
+  }
+}
 
+void runMission(String missionName, int intervalTime, int loopTimes) {
+  intervalTime = intervalTime - timeOffset;
+  if (intervalTime < 0) {intervalTime = 0;}
+  int j = 1;
+  while (true) {
+    Serial.print("Running loop: ");
+    Serial.println(j);
+    int i = 1;
+    while (true) {
+      if (Serial.available() > 0) {
+        break;
+      }
+      if (runStep(missionName, i)) {
+        Serial.print("Step: ");
+        Serial.println(i);
+        i++;
+        delay(intervalTime);
+      } else {
+        Serial.println("Mission Completed.");
+        break;
+      }
+    }
+    j++;
+    if (j > loopTimes && j != -1) {
+      break;
+    }
+  }
+}
 
 void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
   int cmdType;
@@ -76,7 +121,25 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                         break;
   case CMD_SET_CURRENT_POS_ZERO:
                         bodyCtrl.setCurrentPosZero();
+                        memcpy(jointsZeroPos, bodyCtrl.getJointsZeroPosArray(), sizeof(jointsZeroPos));
+                        jsonFeedback.clear();
+                        jsonFeedback["T"] = CMD_SET_JOINTS_ZERO;
+                        for (int i = 0; i < 12; i++) {  
+                          Serial.print("Joint ");
+                          Serial.print(i);
+                          Serial.print(": ");
+                          Serial.println(jointsZeroPos[i]);
+                          jsonFeedback["set"][i] = jointsZeroPos[i];
+                        }
+                        serializeJson(jsonFeedback, outputString);
+                        Serial.println(outputString);
+                        filesCtrl.appendStep("boot", outputString);
                         break;
+  case CMD_CTRL_JOINT_ANGLE:
+                        bodyCtrl.jointAngle(jsonCmdInput["joint"], jsonCmdInput["angle"]);
+                        bodyCtrl.moveTrigger();
+                        break;
+
 
 
 	case CMD_SET_COLOR: 
@@ -104,6 +167,38 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
   case CMD_APPEND_SETP_JSON:
                         filesCtrl.appendStep(jsonCmdInput["name"],
                                              jsonCmdInput["json"]);
+                        break;
+  case CMD_INSERT_SETP_JSON:
+                        filesCtrl.insertStep(jsonCmdInput["name"],
+                                             jsonCmdInput["step"],
+                                             jsonCmdInput["json"]);
+                        break;
+  case CMD_REPLACE_SETP_JSON:
+                        filesCtrl.replaceStep(jsonCmdInput["name"],
+                                              jsonCmdInput["step"],
+                                              jsonCmdInput["json"]);
+                        break;
+  case CMD_DELETE_SETP:
+                        filesCtrl.deleteStep(jsonCmdInput["name"],
+                                             jsonCmdInput["step"]);
+                        break;
+  case CMD_RUN_STEP:    
+                        runStep(jsonCmdInput["name"], jsonCmdInput["step"]);
+                        break;
+  case CMD_RUN_MISSION: 
+                        runMission(jsonCmdInput["name"], 
+                                   jsonCmdInput["interval"], 
+                                   jsonCmdInput["loop"]);
+                        break;
+  case CMD_DELETE_MISSION:
+                        filesCtrl.deleteMission(jsonCmdInput["name"]);
+                        break;
+  
+
+
+  case ESP32_REBOOT:
+                        ESP.restart();
+                        break;
   }
 }
 
@@ -123,7 +218,7 @@ void serialCtrl() {
       DeserializationError err = deserializeJson(jsonCmdReceive, receivedData);
       if (err == DeserializationError::Ok) {
   			if (InfoPrint == 1) {
-  				Serial.println(receivedData);
+  				Serial.print(receivedData);
   			}
         jsonCmdReceiveHandler(jsonCmdReceive);
       } else {

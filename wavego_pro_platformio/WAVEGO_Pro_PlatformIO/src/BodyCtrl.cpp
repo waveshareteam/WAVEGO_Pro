@@ -139,3 +139,47 @@ void BodyCtrl::setCurrentPosZero() {
         jointsZeroPos[i] = jointsCurrentPos[i];
     }
 }
+
+void BodyCtrl::jointAngle(int joint, int angleW) {
+    // joint: 1-12
+    // angleW: 0-220
+    // angle: 0-1023
+    int angle = map(angleW, 0, 220, 0, 1023);
+    jointsGoalPos[joint] = angle * directionArray[joint] + jointsZeroPos[joint];
+    sc.RegWritePos(jointID[joint], jointsGoalPos[joint], 0, 0);
+}
+
+void BodyCtrl::moveTrigger(){
+    sc.RegWriteAction();
+}
+
+
+
+// WAVEGO:	
+//	LF_B     ^     RF_B
+//	LF_A  forward  RF_A
+//	  |              |
+//	LF_H           RF_H
+//
+//
+//  LH_H           RH_H
+//    |              |
+//  LH_A           RH_A
+//  LH_B           RH_B
+// --- --- --- --- --- ---
+// bus servos:
+// #define LEG_LF_A	52
+// #define LEG_LF_B	53
+// #define LEG_LF_H	51
+
+// #define LEG_LH_A	42
+// #define LEG_LH_B	43
+// #define LEG_LH_H	41
+
+// #define LEG_RF_A	22
+// #define LEG_RF_B	23
+// #define LEG_RF_H	21
+
+// #define LEG_RH_A	32
+// #define LEG_RH_B	33
+// #define LEG_RH_H	31
