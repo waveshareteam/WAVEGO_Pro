@@ -14,16 +14,16 @@
 //      B - the one further from the Hip.
 // --- --- --- --- --- ---
 // WAVEGO:	
-//	LF_B     ^     RF_B
-//	LF_A  forward  RF_A
-//	  |              |
-//	LF_H           RF_H
+//	LF_B[1]     ^     RF_B[7]
+//	LF_A[0]  forward  RF_A[6]
+//	  |                 |
+//	LF_H[2]           RF_H[8]
 //
 //
-//  LH_H           RH_H
-//    |              |
-//  LH_A           RH_A
-//  LH_B           RH_B
+//  LH_H[5]           RH_H[11]
+//    |                 |
+//  LH_A[3]           RH_A[9]
+//  LH_B[4]           RH_B[10]
 // --- --- --- --- --- ---
 // bus servos:
 #define LEG_LF_A	52
@@ -140,11 +140,24 @@ void BodyCtrl::setCurrentPosZero() {
     }
 }
 
-void BodyCtrl::jointAngle(int joint, int angleW) {
+void BodyCtrl::jointAngle(int joint, double angleW) {
     // joint: 1-12
     // angleW: 0-220
     // angle: 0-1023
-    int angle = map(angleW, 0, 220, 0, 1023);
+    int angle = round(map(angleW, 0, 300, 0, 1024));
+    jointsGoalPos[joint] = angle * directionArray[joint] + jointsZeroPos[joint];
+    sc.RegWritePos(jointID[joint], jointsGoalPos[joint], 0, 0);
+}
+
+double BodyCtrl::mapDouble(double x, double in_min, double in_max, double out_min, double out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void BodyCtrl::jointRad(int joint, double rad) {
+    // joint: 1-12
+    // rad: 0-5.23598
+    // angle: 0-1023
+    int angle = round(BodyCtrl::mapDouble(rad, 0, 5.23598, 0, 1024));
     jointsGoalPos[joint] = angle * directionArray[joint] + jointsZeroPos[joint];
     sc.RegWritePos(jointID[joint], jointsGoalPos[joint], 0, 0);
 }
@@ -153,19 +166,41 @@ void BodyCtrl::moveTrigger(){
     sc.RegWriteAction();
 }
 
+void BodyCtrl::stand() {
+    BodyCtrl::jointAngle(0, 45);
+    BodyCtrl::jointAngle(1, 45);
+    BodyCtrl::jointAngle(2, 0);
+
+    BodyCtrl::jointAngle(3, 45);
+    BodyCtrl::jointAngle(4, 45);
+    BodyCtrl::jointAngle(5, 0);
+
+    BodyCtrl::jointAngle(6, 45);
+    BodyCtrl::jointAngle(7, 45);
+    BodyCtrl::jointAngle(8, 0);
+
+    BodyCtrl::jointAngle(9, 45);
+    BodyCtrl::jointAngle(10, 45);
+    BodyCtrl::jointAngle(11, 0);
+
+    BodyCtrl::moveTrigger();
+}
+
+
+
 
 
 // WAVEGO:	
-//	LF_B     ^     RF_B
-//	LF_A  forward  RF_A
-//	  |              |
-//	LF_H           RF_H
+//	LF_B[1]     ^     RF_B[7]
+//	LF_A[0]  forward  RF_A[6]
+//	  |                 |
+//	LF_H[2]           RF_H[8]
 //
 //
-//  LH_H           RH_H
-//    |              |
-//  LH_A           RH_A
-//  LH_B           RH_B
+//  LH_H[5]           RH_H[11]
+//    |                 |
+//  LH_A[3]           RH_A[9]
+//  LH_B[4]           RH_B[10]
 // --- --- --- --- --- ---
 // bus servos:
 // #define LEG_LF_A	52

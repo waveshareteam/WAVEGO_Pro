@@ -59,6 +59,10 @@ static int timeOffset = 50;
 // ctrl single joint angle
 // {"T":108,"joint":1,"angle":45}
 #define CMD_CTRL_JOINT_ANGLE 108
+// ctrl single joint radian
+// {"T":109,"joint":1,"rad":0.785}
+#define CMD_CTRL_JOINT_RAD 109
+
 
 
 

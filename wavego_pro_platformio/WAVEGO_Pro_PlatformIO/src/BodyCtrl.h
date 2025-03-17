@@ -24,14 +24,14 @@ public:
         directionArray[1] = 1; 
         directionArray[2] = -1;
         directionArray[3] = 1;
-        directionArray[4] = 1;
+        directionArray[4] = -1;
         directionArray[5] = 1;
         directionArray[6] = 1;
-        directionArray[7] = 1;
+        directionArray[7] = -1;
         directionArray[8] = 1;
-        directionArray[9] = 1;
+        directionArray[9] = -1;
         directionArray[10] = 1;
-        directionArray[11] = 1;
+        directionArray[11] = -1;
     }
     void init();
     void jointMiddle();
@@ -42,8 +42,11 @@ public:
     int* getServoFeedback();
     void setCurrentPosZero();
 
-    void jointAngle(int joint, int angleW);
+    void jointAngle(int joint, double angleW);
+    double mapDouble(double x, double in_min, double in_max, double out_min, double out_max);
+    void jointRad(int joint, double rad);
     void moveTrigger();
+    void stand();
 };
 
 #endif // BODYCTRL_H

@@ -32,8 +32,9 @@ void setup() {
 
   if(!filesCtrl.checkMission("boot")) {
     filesCtrl.createMission("boot", "this is the boot mission.");
-  }
+  } 
   runMission("boot", 0, 1);
+  bodyCtrl.stand(); // need to check T105 first
 }
 
 bool runStep(String missionName, int step) {
@@ -137,6 +138,10 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                         break;
   case CMD_CTRL_JOINT_ANGLE:
                         bodyCtrl.jointAngle(jsonCmdInput["joint"], jsonCmdInput["angle"]);
+                        bodyCtrl.moveTrigger();
+                        break;
+  case CMD_CTRL_JOINT_RAD:
+                        bodyCtrl.jointRad(jsonCmdInput["joint"], jsonCmdInput["rad"]);
                         bodyCtrl.moveTrigger();
                         break;
 
