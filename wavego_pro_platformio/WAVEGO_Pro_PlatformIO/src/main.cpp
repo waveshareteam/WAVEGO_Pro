@@ -34,7 +34,7 @@ void setup() {
     filesCtrl.createMission("boot", "this is the boot mission.");
   } 
   runMission("boot", 0, 1);
-  bodyCtrl.stand(); // need to check T105 first
+  bodyCtrl.stand(); // need to check T105 first, use stand() instead of jointMiddle()
 }
 
 bool runStep(String missionName, int step) {
