@@ -62,7 +62,9 @@ static int timeOffset = 50;
 // ctrl single joint radian
 // {"T":109,"joint":1,"rad":0.785}
 #define CMD_CTRL_JOINT_RAD 109
-
+// stand up
+// {"T":110}
+#define CMD_STAND_UP 110
 
 
 

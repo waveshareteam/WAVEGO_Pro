@@ -263,3 +263,27 @@ bool FilesCtrl::checkMission(String missionName) {
     }
     return true;
 }
+
+bool FilesCtrl::checkStepByType(String missionName, int cmdType) {
+    if (!LittleFS.exists("/" + missionName + ".mission")) {
+        return false;
+    }
+    File file = LittleFS.open("/" + missionName + ".mission", "r");
+    if(!file){
+        Serial.println("Error opening file for reading.");
+        return false;
+    }
+    file.readStringUntil('\n');
+    while (file.available()) {
+        String _content = file.readStringUntil('\n');
+        DeserializationError err = deserializeJson(cmdJson, _content);
+        if (err == DeserializationError::Ok) {
+            if (cmdJson["T"].as<int>() == cmdType) {
+                cmdJson.clear();
+                return true;
+            }
+        }
+        cmdJson.clear();
+    }
+    return false;
+}

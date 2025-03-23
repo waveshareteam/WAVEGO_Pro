@@ -28,13 +28,21 @@ void setup() {
   filesCtrl.init();
 
   bodyCtrl.init();
+  delay(1000);
   bodyCtrl.jointMiddle();
 
   if(!filesCtrl.checkMission("boot")) {
     filesCtrl.createMission("boot", "this is the boot mission.");
-  } 
-  runMission("boot", 0, 1);
-  bodyCtrl.stand(); // need to check T105 first, use stand() instead of jointMiddle()
+  } else {
+    runMission("boot", 0, 1);
+    if (filesCtrl.checkStepByType("boot", CMD_SET_JOINTS_ZERO)) {
+      delay(1000);
+      bodyCtrl.stand(); // need to check T105 first, use stand() instead of jointMiddle()
+      Serial.println("Already set joints zero pos.");
+    } else {
+      Serial.println("Haven't set joints zero pos yet.");
+    }
+  }
 }
 
 bool runStep(String missionName, int step) {
@@ -143,6 +151,9 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
   case CMD_CTRL_JOINT_RAD:
                         bodyCtrl.jointRad(jsonCmdInput["joint"], jsonCmdInput["rad"]);
                         bodyCtrl.moveTrigger();
+                        break;
+  case CMD_STAND_UP:
+                        bodyCtrl.stand();
                         break;
 
 

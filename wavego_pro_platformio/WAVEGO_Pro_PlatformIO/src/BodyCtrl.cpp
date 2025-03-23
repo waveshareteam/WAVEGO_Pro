@@ -193,12 +193,12 @@ void BodyCtrl::stand() {
 // WAVEGO:	
 //	LF_B[1]     ^     RF_B[7]
 //	LF_A[0]  forward  RF_A[6]
-//	  |                 |
+//	  |A|               |C|
 //	LF_H[2]           RF_H[8]
 //
 //
 //  LH_H[5]           RH_H[11]
-//    |                 |
+//    |B|                |4|
 //  LH_A[3]           RH_A[9]
 //  LH_B[4]           RH_B[10]
 // --- --- --- --- --- ---
