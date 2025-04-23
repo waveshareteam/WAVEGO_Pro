@@ -15,7 +15,7 @@ RGBLight led;
 BodyCtrl bodyCtrl;
 FilesCtrl filesCtrl;
 
-int jointsZeroPos[12];
+int ServoMiddlePWM[12];
 int jointsCurrentPos[12];
 void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput);
 void runMission(String missionName, int intervalTime, int loopTimes);
@@ -104,19 +104,19 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                                                  jsonCmdInput["spd"]);
                         break;
   case CMD_GET_JOINTS_ZERO:
-                        memcpy(jointsZeroPos, bodyCtrl.getJointsZeroPosArray(), sizeof(jointsZeroPos));
+                        memcpy(ServoMiddlePWM, bodyCtrl.getJointsZeroPosArray(), sizeof(ServoMiddlePWM));
                         for (int i = 0; i < 12; i++) {  
                           Serial.print("Joint ");
                           Serial.print(i);
                           Serial.print(": ");
-                          Serial.println(jointsZeroPos[i]);
+                          Serial.println(ServoMiddlePWM[i]);
                         }
                         break;
   case CMD_SET_JOINTS_ZERO:
                         for (int i = 0; i < 12; i++) {
-                          jointsZeroPos[i] = jsonCmdInput["set"][i];
+                          ServoMiddlePWM[i] = jsonCmdInput["set"][i];
                         }
-                        bodyCtrl.setJointsZeroPosArray(jointsZeroPos);
+                        bodyCtrl.setJointsZeroPosArray(ServoMiddlePWM);
                         break;
   case CMD_GET_CURRENT_POS:
                         memcpy(jointsCurrentPos, bodyCtrl.getServoFeedback(), sizeof(jointsCurrentPos));
@@ -130,15 +130,15 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
                         break;
   case CMD_SET_CURRENT_POS_ZERO:
                         bodyCtrl.setCurrentPosZero();
-                        memcpy(jointsZeroPos, bodyCtrl.getJointsZeroPosArray(), sizeof(jointsZeroPos));
+                        memcpy(ServoMiddlePWM, bodyCtrl.getJointsZeroPosArray(), sizeof(ServoMiddlePWM));
                         jsonFeedback.clear();
                         jsonFeedback["T"] = CMD_SET_JOINTS_ZERO;
                         for (int i = 0; i < 12; i++) {  
                           Serial.print("Joint ");
                           Serial.print(i);
                           Serial.print(": ");
-                          Serial.println(jointsZeroPos[i]);
-                          jsonFeedback["set"][i] = jointsZeroPos[i];
+                          Serial.println(ServoMiddlePWM[i]);
+                          jsonFeedback["set"][i] = ServoMiddlePWM[i];
                         }
                         serializeJson(jsonFeedback, outputString);
                         Serial.println(outputString);
@@ -254,5 +254,6 @@ void serialCtrl() {
 void loop() {
   // put your main code here, to run repeatedly:
   serialCtrl();
+  bodyCtrl.massCenerAdjustTestLoop();
 }
 

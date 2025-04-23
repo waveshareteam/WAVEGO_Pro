@@ -66,7 +66,12 @@ static int timeOffset = 50;
 // {"T":110}
 #define CMD_STAND_UP 110
 
-
+// basic movtion ctrl
+// {"T":111,"FB":0,"LR":0}
+#define CMD_BASIC_MOVE 111
+// basic functions
+// {"T":112,"func":0}
+#define CMD_BASIC_FUNC 112
 
 // id 0 -> left LED
 // id 1 -> right LED
