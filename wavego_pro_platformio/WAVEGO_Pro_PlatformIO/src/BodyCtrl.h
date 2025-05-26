@@ -12,15 +12,19 @@ private:
                             -16, 95, 25,
                              16, 95, 25,
                             -16, 95, 25}; // arry to store the position of every leg
-    int GoalPWM[12]; // array to store the goal position of each joint
-
+    u16 GoalPWM[12]; // array to store the goal position of each joint
+    double GoalAngle[12]; // array to store the goal angle of each joint
+    u16 speedArray[12] = { 0, 0, 0,
+                           0, 0, 0,
+                           0, 0, 0,
+                           0, 0, 0}; // array to store the speed of each joint
     // int directionArray[12]; // array to store the direction of each joint
-    int ServoDirection[16] = {-1,  1,  1,
-                               1, -1, -1,
+    int ServoDirection[16] = { 1, -1, -1,
+                               1,  1, -1,
                               -1,  1,  1,
-                               1, -1, -1};
+                              -1, -1,  1};
     // int jointID[12] = {52, 53, 51, 42, 43, 41, 22, 23, 21, 32, 33, 31};
-    int jointID[12] = {53, 52, 51, 41, 42, 43, 23, 22, 21, 31, 32, 33};
+    u8 jointID[12] = {53, 52, 51, 41, 42, 43, 23, 22, 21, 31, 32, 33};
     double linkageBuffer[32] = {0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0,
                                 0, 0, 0, 0, 0, 0, 0, 0,
@@ -30,9 +34,9 @@ public:
     BodyCtrl() {
         // Initialize jointsZeroPos array
         for(int i = 0; i < 12; i++) {
-            ServoMiddlePWM[i] = 512; // or any other default value
-            jointsCurrentPos[i] = 512; // or any other default value
-            GoalPWM[i] = 512; // or any other default value
+            ServoMiddlePWM[i] = 511; // or any other default value
+            jointsCurrentPos[i] = 511; // or any other default value
+            GoalPWM[i] = 511; // or any other default value
         }
         // directionArray[0] = -1;
         // directionArray[1] = 1; 
@@ -57,6 +61,7 @@ public:
     void setCurrentPosZero();
 
     void jointAngle(int joint, double angleW);
+    void allJointAngle(double angleWs[]);
     double mapDouble(double x, double in_min, double in_max, double out_min, double out_max);
     void jointRad(int joint, double rad);
     void moveTrigger();
@@ -76,7 +81,20 @@ public:
     void balancing(float ACC_Y, float ACC_X);
     void massCenerAdjustTestLoop();
 
-
+    void inputCmd(int fb, int lr);
+    void setInterpolationParams(int delayInput, float iterateInput);
+    void setGaitParams(double maxHeight, double minHeight, double height, double lift, 
+            double range, double acc, double extendedX, double extendedZ, double sideMax, double massAdjust);
+    void robotCtrl();
+    
+    float linearCtrl(float numStart, float numEnd, float rateInput);
+    float besselCtrl(float numStart, float numEnd, float rateInput);
+    void functionStayLow();
+    void functionHandshake();
+    void functionJump();
+    
+    void pitchYawRoll(float pitchInput, float yawInput, float rollInput);
+    void steadyCtrl(int cmd);
 };
 
 #endif // BODYCTRL_H

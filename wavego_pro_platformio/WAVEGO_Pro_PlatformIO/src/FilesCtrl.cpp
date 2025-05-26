@@ -287,3 +287,99 @@ bool FilesCtrl::checkStepByType(String missionName, int cmdType) {
     }
     return false;
 }
+
+bool FilesCtrl::checkReplaceStep(String missionName, String jsonCmd) {
+    if (!LittleFS.exists("/" + missionName + ".mission")) {
+        Serial.println("file not found.");
+        return false;
+    }
+
+    cmdJson.clear();
+    DeserializationError err = deserializeJson(cmdJson, jsonCmd);
+    if (err != DeserializationError::Ok) {
+        Serial.println("[deserializeJson err]");
+        return false;
+    }
+
+    if (!cmdJson["T"].is<int>()) {
+        Serial.println("Invalid jsonCmd: missing 'T' field.");
+        return false;
+    }
+    int targetT = cmdJson["T"].as<int>();
+
+    File file = LittleFS.open("/" + missionName + ".mission", "r");
+    if (!file) {
+        Serial.println("Error opening file for reading.");
+        return false;
+    }
+
+    String _content = "";
+    String line;
+    bool replaced = false;
+    _content += file.readStringUntil('\n') + "\n";
+
+    // Read and process each line
+    while (file.available()) {
+        line = file.readStringUntil('\n');
+        cmdJson.clear();
+        DeserializationError lineErr = deserializeJson(cmdJson, line);
+
+        if (lineErr == DeserializationError::Ok && cmdJson["T"].as<int>() == targetT) {
+            replaced = true; // Mark as replaced for each matching line
+        } else {
+            _content += line + "\n"; // Keep the line if not matching
+            Serial.print("read: ");
+            Serial.println(cmdJson["T"].as<int>());
+            Serial.print("target: ");
+            Serial.println(targetT);
+        }
+    }
+    file.close();
+
+    // Write the updated content back to the file
+    file = LittleFS.open("/" + missionName + ".mission", "w");
+    if (!file) {
+        Serial.println("Error opening file for writing.");
+        return false;
+    }
+    file.print(_content);
+    file.close();
+
+    // Append the new jsonCmd if replacement occurred
+    if (replaced) {
+        appendStep(missionName, jsonCmd);
+        Serial.println("Step replaced successfully.");
+        return true;
+    } else {
+        appendStep(missionName, jsonCmd);
+        Serial.println("No matching step found to replace. Appended instead.");
+        return true;
+    }
+}
+
+String FilesCtrl::findCmdByType(String missionName, int cmdType) {
+    if (!LittleFS.exists("/" + missionName + ".mission")) {
+        Serial.println("file not found.");
+        return "";
+    }
+
+    File file = LittleFS.open("/" + missionName + ".mission", "r");
+    if (!file) {
+        Serial.println("Error opening file for reading.");
+        return "";
+    }
+
+    String line;
+    String targetCmd = "";
+    while (file.available()) {
+        line = file.readStringUntil('\n');
+        DeserializationError lineErr = deserializeJson(cmdJson, line);
+        if (lineErr == DeserializationError::Ok && cmdJson["T"] == cmdType) {
+            targetCmd = line;
+            break;
+        }
+    }
+    file.close();
+
+    return targetCmd;
+}

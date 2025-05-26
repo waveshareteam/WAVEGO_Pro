@@ -25,22 +25,6 @@
 //  LH_A[3]           RH_A[9]
 //  LH_B[4]           RH_B[10]
 // --- --- --- --- --- ---
-// bus servos:
-// #define LEG_LF_A	52
-// #define LEG_LF_B	53
-// #define LEG_LF_H	51
-
-// #define LEG_LH_A	42
-// #define LEG_LH_B	43
-// #define LEG_LH_H	41
-
-// #define LEG_RF_A	22
-// #define LEG_RF_B	23
-// #define LEG_RF_H	21
-
-// #define LEG_RH_A	32
-// #define LEG_RH_B	33
-// #define LEG_RH_H	31
 
 #define LEG_A_FORE 0
 #define LEG_A_BACK 1
@@ -121,13 +105,11 @@ float BALANCE_PITCHU_BUFFER;
 float BALANCE_ROLL_BUFFER;
 float BALANCE_PITCHU_BASE = 0;
 float BALANCE_ROLL_BASE   = 0;
-float BALANCE_P = 0.00018;
+float BALANCE_P = 0.0000001;
 
 float GLOBAL_STEP  = 0;
-int   STEP_DELAY   = 4;
-// int   STEP_DELAY   = 2;
-float STEP_ITERATE = 0.04;
-// float STEP_ITERATE = 0.01;
+int   STEP_DELAY   = 5;
+float STEP_ITERATE = 0.02;
 
 int SERVO_MOVE_EVERY = 0;
 
@@ -168,8 +150,6 @@ int STAND_STILL = 0;
 // 1: triangularGait.
 int GAIT_TYPE = 0;
 
-
-
 // --- --- --- --- --- ---
 void BodyCtrl::init() {
     // Initialize BodyCtrl
@@ -180,7 +160,7 @@ void BodyCtrl::init() {
 
 void BodyCtrl::jointMiddle() {
     // Joint middle
-    sc.WritePos(254, 512, 0, 0);
+    sc.WritePos(254, 511, 0, 0);
 }
 
 void BodyCtrl::releaseTorque() {
@@ -217,12 +197,23 @@ void BodyCtrl::setCurrentPosZero() {
 }
 
 void BodyCtrl::jointAngle(int joint, double angleW) {
-    // joint: 1-12
-    // angleW: 0-220
+    // joint: 0-11
+    // angleW: 0-300
     // angle: 0-1023
     int angle = round(map(angleW, 0, 300, 0, 1024));
     GoalPWM[joint] = angle * ServoDirection[joint] + ServoMiddlePWM[joint];
     sc.RegWritePos(jointID[joint], GoalPWM[joint], 0, 0);
+}
+
+void BodyCtrl::allJointAngle(double angleWs[]) {
+    // joint: 0-11
+    // angleW: 0-30
+    // angle: 0-1023
+    for (int i = 0; i < 12; i++) {
+        int angle = round(map(angleWs[i], 0, 300, 0, 1024));
+        GoalPWM[i] = angle * ServoDirection[i] + ServoMiddlePWM[i];
+    }
+    sc.SyncWritePos(jointID, 12, GoalPWM, 0, speedArray);
 }
 
 double BodyCtrl::mapDouble(double x, double in_min, double in_max, double out_min, double out_max) {
@@ -247,17 +238,17 @@ void BodyCtrl::stand() {
     BodyCtrl::jointAngle(1, 45);
     BodyCtrl::jointAngle(2, 0);
 
-    BodyCtrl::jointAngle(3, 45);
+    BodyCtrl::jointAngle(3, 0);
     BodyCtrl::jointAngle(4, 45);
-    BodyCtrl::jointAngle(5, 0);
+    BodyCtrl::jointAngle(5, 45);
 
     BodyCtrl::jointAngle(6, 45);
     BodyCtrl::jointAngle(7, 45);
     BodyCtrl::jointAngle(8, 0);
 
-    BodyCtrl::jointAngle(9, 45);
+    BodyCtrl::jointAngle(9, 0);
     BodyCtrl::jointAngle(10, 45);
-    BodyCtrl::jointAngle(11, 0);
+    BodyCtrl::jointAngle(11, 45);
 
     BodyCtrl::moveTrigger();
 }
@@ -486,9 +477,13 @@ void BodyCtrl::singleLegCtrl(uint8_t LegNum, double xPos, double yPos, double zP
     singleLegPlaneIK(linkage_s, linkage_a, linkage_c, linkage_d, linkage_e, xPos, linkageBuffer[wiggleLen], alphaOut, xPosBuffer, yPosBuffer);
     simpleLinkageIK(linkage_a, linkage_b, linkageBuffer[yPosBuffer], (linkageBuffer[xPosBuffer]-linkage_s/2), betaOut, betaB, betaC);
   
-    jointAngle(NumW, linkageBuffer[wiggleAlpha]);
-    jointAngle(NumF, (90 - linkageBuffer[betaOut]));
-    jointAngle(NumB, linkageBuffer[alphaOut]);
+    // jointAngle(NumW, linkageBuffer[wiggleAlpha]);
+    // jointAngle(NumF, (90 - linkageBuffer[betaOut]));
+    // jointAngle(NumB, linkageBuffer[alphaOut]);
+
+    GoalAngle[NumW] = linkageBuffer[wiggleAlpha];
+    GoalAngle[NumF] = (90 - linkageBuffer[betaOut]);
+    GoalAngle[NumB] = linkageBuffer[alphaOut];
 }
 
 void BodyCtrl::standUp(double cmdInput){
@@ -496,6 +491,7 @@ void BodyCtrl::standUp(double cmdInput){
     singleLegCtrl(2, -WALK_EXTENDED_X, cmdInput, WALK_EXTENDED_Z);
     singleLegCtrl(3, WALK_EXTENDED_X, cmdInput, WALK_EXTENDED_Z);
     singleLegCtrl(4, -WALK_EXTENDED_X, cmdInput, WALK_EXTENDED_Z);
+    allJointAngle(GoalAngle);
 }
 
 // Ctrl the gait of a single leg with the variable cycleInput change between 0-1.
@@ -692,6 +688,43 @@ void BodyCtrl::pitchYawRollHeightCtrl(float pitchInput, float yawInput, float ro
     singleLegCtrl(4, -WALK_EXTENDED_X, legPosBuffer[10], legPosBuffer[11]);
 }
 
+void BodyCtrl::pitchYawRoll(float pitchInput, float yawInput, float rollInput){
+  legPosBuffer[1]  = STAND_HEIGHT + pitchInput + rollInput;
+  legPosBuffer[4]  = STAND_HEIGHT - pitchInput + rollInput;
+  legPosBuffer[7]  = STAND_HEIGHT + pitchInput - rollInput;
+  legPosBuffer[10] = STAND_HEIGHT - pitchInput - rollInput;
+
+  if(legPosBuffer[1] > WALK_HEIGHT_MAX){legPosBuffer[1] = WALK_HEIGHT_MAX;}
+  if(legPosBuffer[4] > WALK_HEIGHT_MAX){legPosBuffer[4] = WALK_HEIGHT_MAX;}
+  if(legPosBuffer[7] > WALK_HEIGHT_MAX){legPosBuffer[7] = WALK_HEIGHT_MAX;}
+  if(legPosBuffer[10] > WALK_HEIGHT_MAX){legPosBuffer[10] = WALK_HEIGHT_MAX;}
+  
+  if(legPosBuffer[1] < WALK_HEIGHT_MIN){legPosBuffer[1] = WALK_HEIGHT_MIN;}
+  if(legPosBuffer[4] < WALK_HEIGHT_MIN){legPosBuffer[4] = WALK_HEIGHT_MIN;}
+  if(legPosBuffer[7] < WALK_HEIGHT_MIN){legPosBuffer[7] = WALK_HEIGHT_MIN;}
+  if(legPosBuffer[10] < WALK_HEIGHT_MIN){legPosBuffer[10] = WALK_HEIGHT_MIN;}
+
+  legPosBuffer[2]  = WALK_EXTENDED_Z + yawInput - rollInput;
+  legPosBuffer[5]  = WALK_EXTENDED_Z - yawInput - rollInput;
+  legPosBuffer[8]  = WALK_EXTENDED_Z - yawInput + rollInput;
+  legPosBuffer[11] = WALK_EXTENDED_Z + yawInput + rollInput;
+
+  if(legPosBuffer[2] > WALK_EXTENDED_Z + WALK_SIDE_MAX){legPosBuffer[2] = WALK_EXTENDED_Z + WALK_SIDE_MAX;}
+  if(legPosBuffer[5] > WALK_EXTENDED_Z + WALK_SIDE_MAX){legPosBuffer[5] = WALK_EXTENDED_Z + WALK_SIDE_MAX;}
+  if(legPosBuffer[8] > WALK_EXTENDED_Z + WALK_SIDE_MAX){legPosBuffer[8] = WALK_EXTENDED_Z + WALK_SIDE_MAX;}
+  if(legPosBuffer[11] > WALK_EXTENDED_Z + WALK_SIDE_MAX){legPosBuffer[11] = WALK_EXTENDED_Z + WALK_SIDE_MAX;}
+
+  if(legPosBuffer[2] < WALK_EXTENDED_Z - WALK_SIDE_MAX){legPosBuffer[2] = WALK_EXTENDED_Z - WALK_SIDE_MAX;}
+  if(legPosBuffer[5] < WALK_EXTENDED_Z - WALK_SIDE_MAX){legPosBuffer[5] = WALK_EXTENDED_Z - WALK_SIDE_MAX;}
+  if(legPosBuffer[8] < WALK_EXTENDED_Z - WALK_SIDE_MAX){legPosBuffer[8] = WALK_EXTENDED_Z - WALK_SIDE_MAX;}
+  if(legPosBuffer[11] < WALK_EXTENDED_Z - WALK_SIDE_MAX){legPosBuffer[11] = WALK_EXTENDED_Z - WALK_SIDE_MAX;}
+
+  singleLegCtrl(1,  WALK_EXTENDED_X, legPosBuffer[1] , legPosBuffer[2]);
+  singleLegCtrl(2, -WALK_EXTENDED_X, legPosBuffer[4] , legPosBuffer[5]);
+  singleLegCtrl(3,  WALK_EXTENDED_X, legPosBuffer[7] , legPosBuffer[8]);
+  singleLegCtrl(4, -WALK_EXTENDED_X, legPosBuffer[10], legPosBuffer[11]);
+}
+
 // BALANCE
 void BodyCtrl::balancing(float ACC_Y, float ACC_X){
     BALANCE_PITCHU_BUFFER += ACC_Y * BALANCE_P;
@@ -703,32 +736,213 @@ void BodyCtrl::balancing(float ACC_Y, float ACC_X){
     if(BALANCE_ROLL_BUFFER > 21){BALANCE_ROLL_BUFFER = 21;}
     if(BALANCE_ROLL_BUFFER < -21){BALANCE_ROLL_BUFFER = -21;}
     
-    pitchYawRollHeightCtrl(BALANCE_PITCHU_BUFFER, 0, BALANCE_ROLL_BUFFER, STAND_HEIGHT);
+    // pitchYawRollHeightCtrl(BALANCE_PITCHU_BUFFER, 0, BALANCE_ROLL_BUFFER, STAND_HEIGHT);
+    pitchYawRoll(BALANCE_PITCHU_BUFFER, 0, BALANCE_ROLL_BUFFER);
+
+    allJointAngle(GoalAngle);
+    delay(30);
 }
 
 // mass center adjust test.
 void BodyCtrl::massCenerAdjustTestLoop(){
-    for(float i = 0; i<=20; i = i+0.6){
+    for(float i = 0; i<=20; i = i+0.5){
       standMassCenter(-20+i, i);
-      moveTrigger();
-      delay(0);
+      allJointAngle(GoalAngle);
+      Serial.println("1");
+      delay(1);
     }
   
-    for(float i = 0; i<=20; i = i+0.6){
+    for(float i = 0; i<=20; i = i+0.5){
       standMassCenter(i, 20-i);
-      moveTrigger();
-      delay(0);
+      allJointAngle(GoalAngle);
+      Serial.println("2");
+      delay(1);
     }
   
-    for(float i = 0; i<=20; i = i+0.6){
+    for(float i = 0; i<=20; i = i+0.5){
       standMassCenter(20-i, -i);
-      moveTrigger();
-      delay(0);
+      allJointAngle(GoalAngle);
+      Serial.println("3");
+      delay(1);
     }
   
-    for(float i = 0; i<=20; i = i+0.6){
+    for(float i = 0; i<=20; i = i+0.5){
       standMassCenter(-i, -20+i);
-      moveTrigger();
-      delay(0);
+      allJointAngle(GoalAngle);
+      Serial.println("4");
+      delay(1);
     }
+}
+
+void BodyCtrl::inputCmd(int fb, int lr){
+    moveFB = fb;
+    moveLR = lr;
+}
+
+void BodyCtrl::setInterpolationParams(int delayInput, float iterateInput){
+  STEP_DELAY   = delayInput;
+  STEP_ITERATE = iterateInput;
+}
+
+void BodyCtrl::setGaitParams(double maxHeight, double minHeight, double height, double lift, 
+          double range, double acc, double extendedX, double extendedZ, double sideMax, double massAdjust){
+  WALK_HEIGHT_MAX  = maxHeight;
+  WALK_HEIGHT_MIN  = minHeight;
+  WALK_HEIGHT      = height;
+  WALK_LIFT        = lift; // WALK_HEIGHT + WALK_LIFT <= WALK_HEIGHT_MAX.
+  WALK_RANGE       = range;
+  WALK_ACC         = acc;
+  WALK_EXTENDED_X  = extendedX;
+  WALK_EXTENDED_Z  = extendedZ;
+  WALK_SIDE_MAX    = sideMax;
+  WALK_MASS_ADJUST = massAdjust;
+}
+
+void BodyCtrl::robotCtrl(){
+  // move ctrl.
+  if(!debugMode && !funcMode){
+    if(moveFB == 0 && moveLR == 0 && STAND_STILL == 0){
+      standMassCenter(0, 0);
+      allJointAngle(GoalAngle);
+      STAND_STILL = 1;
+      GLOBAL_STEP = 0;
+      delay(STEP_DELAY);
+    }
+    else if(moveFB == 0 && moveLR == 0 && STAND_STILL == 1){
+      allJointAngle(GoalAngle);
+      delay(STEP_DELAY);
+    }
+    else{
+      STAND_STILL = 0;
+      gestureUD = 0;
+      gestureLR = 0;
+      if(GLOBAL_STEP > 1){GLOBAL_STEP = 0;}
+      if(moveFB == 1 && moveLR == 0){gaitTypeCtrl(GLOBAL_STEP, 0, 0);}
+      else if(moveFB == -1 && moveLR == 0){gaitTypeCtrl(GLOBAL_STEP, 180, 0);}
+      else if(moveFB == 1 && moveLR == -1){gaitTypeCtrl(GLOBAL_STEP, 30, 0);}
+      else if(moveFB == 1 && moveLR == 1){gaitTypeCtrl(GLOBAL_STEP, -30, 0);}
+      else if(moveFB == -1 && moveLR == 1){gaitTypeCtrl(GLOBAL_STEP, -120, 0);}
+      else if(moveFB == -1 && moveLR == -1){gaitTypeCtrl(GLOBAL_STEP, 120, 0);}
+      else if(moveFB == 0 && moveLR == -1){gaitTypeCtrl(GLOBAL_STEP, 0, -1);}
+      else if(moveFB == 0 && moveLR == 1){gaitTypeCtrl(GLOBAL_STEP, 0, 1);}
+      allJointAngle(GoalAngle);
+      GLOBAL_STEP += STEP_ITERATE;
+      delay(STEP_DELAY);
+    }
+  }
+}
+
+
+// key frames ctrl.
+// 0 <= rateInput <= 1
+// use it fuction to ctrl a number change from numStart to numEnd.
+float BodyCtrl::linearCtrl(float numStart, float numEnd, float rateInput){
+  float numOut;
+  numOut = (numEnd - numStart)*rateInput + numStart;
+  return numOut;
+}
+
+
+// linearCtrl() function is a simple example, which shows how besselCtrl works.
+float BodyCtrl::besselCtrl(float numStart, float numEnd, float rateInput){
+  float numOut;
+  numOut = (numEnd - numStart)*((cos(rateInput*M_PI-M_PI)+1)/2) + numStart;
+  return numOut;
+}
+
+
+// Functions.
+void BodyCtrl::functionStayLow(){
+  for(float i = 0; i<=1; i+=0.02){
+    standUp(besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN, i));
+    allJointAngle(GoalAngle);
+    delay(6);
+  }
+  delay(300);
+  for(float i = 0; i<=1; i+=0.02){
+    standUp(besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT_MAX, i));
+    allJointAngle(GoalAngle);
+    delay(6);
+  }
+  for(float i = 0; i<=1; i+=0.02){
+    standUp(besselCtrl(WALK_HEIGHT_MAX, WALK_HEIGHT, i));
+    allJointAngle(GoalAngle);
+    delay(6);
+  }
+}
+
+
+void BodyCtrl::functionHandshake(){
+  for(float i = 0; i<=1; i+=0.01){
+    singleLegCtrl(1,  besselCtrl(WALK_EXTENDED_X, 0, i), besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MAX, i), besselCtrl(WALK_EXTENDED_Z, -15, i));
+    singleLegCtrl(3,  besselCtrl(WALK_EXTENDED_X, 0, i), besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MAX, i), WALK_EXTENDED_Z);
+
+    singleLegCtrl(2,  -WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN-10, i), besselCtrl(WALK_EXTENDED_Z, 2*WALK_EXTENDED_Z, i));
+    singleLegCtrl(4,  -WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN-10, i), besselCtrl(WALK_EXTENDED_Z, 2*WALK_EXTENDED_Z, i));
+
+    allJointAngle(GoalAngle);
+    delay(8);
+  }
+
+
+  for(float i = 0; i<=1; i+=0.01){
+    singleLegCtrl(3,  besselCtrl(0, WALK_RANGE/2+WALK_EXTENDED_X, i), besselCtrl(WALK_HEIGHT_MAX, WALK_HEIGHT_MIN, i), besselCtrl(WALK_EXTENDED_Z, 0, i));
+
+    allJointAngle(GoalAngle);
+    delay(8);
+  }
+
+  for(int shakeTimes = 0; shakeTimes < 3; shakeTimes++){
+    for(float i = 0; i<=1; i+=0.02){
+      singleLegCtrl(3,  WALK_RANGE/2+WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT_MIN+30, i), 0);
+
+      allJointAngle(GoalAngle);
+      delay(9);
+    }
+    for(float i = 0; i<=1; i+=0.02){
+      singleLegCtrl(3,  WALK_RANGE/2+WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN+30, WALK_HEIGHT_MIN, i), 0);
+
+      allJointAngle(GoalAngle);
+      delay(9);
+    }
+  }
+
+  for(float i = 0; i<=1; i+=0.01){
+    singleLegCtrl(1,  besselCtrl(0, WALK_EXTENDED_X, i), besselCtrl(WALK_HEIGHT_MAX, WALK_HEIGHT, i), besselCtrl(-15, WALK_EXTENDED_Z, i));
+    singleLegCtrl(3,  besselCtrl(WALK_RANGE/2+WALK_EXTENDED_X, WALK_EXTENDED_X, i), besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT, i), besselCtrl(0, WALK_EXTENDED_Z, i));
+
+    singleLegCtrl(2,  -WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN-10, WALK_HEIGHT, i), besselCtrl(2*WALK_EXTENDED_Z, WALK_EXTENDED_Z, i));
+    singleLegCtrl(4,  -WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN-10, WALK_HEIGHT, i), besselCtrl(2*WALK_EXTENDED_Z, WALK_EXTENDED_Z, i));
+
+    allJointAngle(GoalAngle);
+    delay(8);
+  }
+}
+
+
+void BodyCtrl::functionJump(){
+  for(float i = 0; i<=1; i+=0.02){
+    singleLegCtrl(1, WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN, i), WALK_EXTENDED_Z);
+    singleLegCtrl(2,-WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN, i), WALK_EXTENDED_Z);
+    singleLegCtrl(3, WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN, i), WALK_EXTENDED_Z);
+    singleLegCtrl(4,-WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT, WALK_HEIGHT_MIN, i), WALK_EXTENDED_Z);
+    allJointAngle(GoalAngle);
+    delay(12);
+  }
+  delay(300);
+  singleLegCtrl(1, WALK_EXTENDED_X, WALK_HEIGHT_MAX, WALK_EXTENDED_Z);
+  singleLegCtrl(2,-WALK_EXTENDED_X, WALK_HEIGHT_MAX, WALK_EXTENDED_Z);
+  singleLegCtrl(3, WALK_EXTENDED_X, WALK_HEIGHT_MAX, WALK_EXTENDED_Z);
+  singleLegCtrl(4,-WALK_EXTENDED_X, WALK_HEIGHT_MAX, WALK_EXTENDED_Z);
+  allJointAngle(GoalAngle);
+  delay(120);
+
+  for(float i = 0; i<=1; i+=0.02){
+    singleLegCtrl(1, WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT, i), WALK_EXTENDED_Z);
+    singleLegCtrl(2,-WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT, i), WALK_EXTENDED_Z);
+    singleLegCtrl(3, WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT, i), WALK_EXTENDED_Z);
+    singleLegCtrl(4,-WALK_EXTENDED_X, besselCtrl(WALK_HEIGHT_MIN, WALK_HEIGHT, i), WALK_EXTENDED_Z);
+    allJointAngle(GoalAngle);
+    delay(12);
+  }
 }
