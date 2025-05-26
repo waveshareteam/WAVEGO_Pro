@@ -254,123 +254,49 @@ const char index_html[] PROGMEM = R"rawliteral(
                 <h2 class="h2-tt" id="deviceInfo">Control Panel</h2>
             </div>
             <div class="for-move">
-                <div class="for-move-a">
-                    <div class="info-device-box">
-                        <div class="info-box num-box-big">
-                            <div >
-                                <span class="big-num num-color" id="V">-1.01</span>
-                                <span id="Vn">VOLTAGE</span>
-                            </div>
-                            <div>
-                                <span class="big-num num-color" id="RSSI">-1.01</span>
-                                <span id="RSSIn">RSSI</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-device-box">
-                        <div class="info-box num-box-mid">
-                            <!-- <div>
-                                <span class="num-color mid-num" id="r">-1.01</span>
-                                <span id="rn">ROLL</span>
-                            </div>
-                            <div>
-                                <span class="num-color mid-num" id="p">-1.01</span>
-                                <span id="pn">PITCH</span>
-                            </div>
-                            <div>
-                                <span class="num-color mid-num" id="y">-1.01</span>
-                                <span id="yn">YAW</span>
-                            </div>
-                            <div>
-                                <span class="num-color mid-num" id="mX">-1.01</span>
-                                <span id="mXn">PAN</span>
-                            </div>
-                            <div>
-                                <span class="num-color mid-num" id="mY">-1.01</span>
-                                <span id="mYn">TILT</span>
-                            </div>
-                            <div>
-                                <span class="num-color mid-num" id="mZ">-1.01</span>
-                                <span id="mZn">SPD_R</span>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="info-device-box">
-                        <div class="info-box num-box-sma">
-                            <!-- <div>
-                                <span class="num-color sma-num" id="IP">192.168.10.67</span>
-                                <span id="IPn">IP</span>
-                            </div>
-                            <div>
-                                <span class="num-color sma-num" id="MAC">44:17:93:EE:F8:F8</span>
-                                <span id="MACn">MAC</span>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
                 <div class="for-move-b controlor">
                     <div class="controlor-c">
                         <div>
                             <div>
-                                <label><button class="cc-btn" onmousedown="movtionButton(0.3,0.5);" ontouchstart="movtionButton(0.3,0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough"><path d="M0,2L0,18.1716C0,19.9534,2.15428,20.8457,3.41421,19.5858L19.5858,3.41421C20.8457,2.15428,19.9534,0,18.1716,0L2,0C0.895431,0,0,0.895431,0,2Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
-                                <label><button class="cc-btn" onmousedown="movtionButton(0.5,0.5);" ontouchstart="movtionButton(0.5,0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="26.87807685863504" height="15.435028109846826" viewBox="0 0 26.87807685863504 15.435028109846826"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M12.0248,0.585787L0.589796,12.0208C-0.670133,13.2807,0.222199,15.435,2.00401,15.435L24.8741,15.435C26.6559,15.435,27.5482,13.2807,26.2883,12.0208L14.8533,0.585787C14.0722,-0.195262,12.8059,-0.195262,12.0248,0.585787Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
-                                <label><button class="cc-btn" onmousedown="movtionButton(0.5,0.3);" ontouchstart="movtionButton(0.5,0.3);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(0,1,-1,0,23,-23)"><path d="M23,2L23,18.1716C23,19.9534,25.15428,20.8457,26.41421,19.5858L42.5858,3.41421C43.8457,2.15428,42.9534,0,41.1716,0L25,0C23.895431,0,23,0.895431,23,2Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(1,-1);" ontouchstart="movtionButton(1,-1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough"><path d="M0,2L0,18.1716C0,19.9534,2.15428,20.8457,3.41421,19.5858L19.5858,3.41421C20.8457,2.15428,19.9534,0,18.1716,0L2,0C0.895431,0,0,0.895431,0,2Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(1, 0);" ontouchstart="movtionButton(1, 0);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="26.87807685863504" height="15.435028109846826" viewBox="0 0 26.87807685863504 15.435028109846826"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M12.0248,0.585787L0.589796,12.0208C-0.670133,13.2807,0.222199,15.435,2.00401,15.435L24.8741,15.435C26.6559,15.435,27.5482,13.2807,26.2883,12.0208L14.8533,0.585787C14.0722,-0.195262,12.8059,-0.195262,12.0248,0.585787Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(1, 1);" ontouchstart="movtionButton(1, 1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(0,1,-1,0,23,-23)"><path d="M23,2L23,18.1716C23,19.9534,25.15428,20.8457,26.41421,19.5858L42.5858,3.41421C43.8457,2.15428,42.9534,0,41.1716,0L25,0C23.895431,0,23,0.895431,23,2Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
                             </div>
                             <div>
-                                <label><button class="cc-btn" onmousedown="movtionButton(-0.5,0.5);" ontouchstart="movtionButton(-0.5,0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="15.435028109846769" height="26.87807685863504" viewBox="0 0 15.435028109846769 26.87807685863504"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M0.585787,14.8533L12.0208,26.2883C13.2807,27.5482,15.435,26.6559,15.435,24.8741L15.435,2.00401C15.435,0.222199,13.2807,-0.670133,12.0208,0.589795L0.585787,12.0248C-0.195262,12.8059,-0.195262,14.0722,0.585787,14.8533Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(0,-1);" ontouchstart="movtionButton(0,-1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="15.435028109846769" height="26.87807685863504" viewBox="0 0 15.435028109846769 26.87807685863504"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M0.585787,14.8533L12.0208,26.2883C13.2807,27.5482,15.435,26.6559,15.435,24.8741L15.435,2.00401C15.435,0.222199,13.2807,-0.670133,12.0208,0.589795L0.585787,12.0248C-0.195262,12.8059,-0.195262,14.0722,0.585787,14.8533Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
                                 <label><button class="cc-btn cc-middle" onmousedown="movtionButton(0,0);" ontouchstart="movtionButton(0,0);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);">STOP</button></label>
-                                <label><button class="cc-btn" onmousedown="movtionButton(0.5,-0.5);" ontouchstart="movtionButton(0.5,-0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="15.435030017195288" height="26.87807685863504" viewBox="0 0 15.435030017195288 26.87807685863504"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M14.8492,12.0248L3.41422,0.589796C2.15429,-0.670133,-9.53674e-7,0.222199,9.53674e-7,2.00401L9.53674e-7,24.8741C-9.53674e-7,26.6559,2.15429,27.5482,3.41421,26.2883L14.8492,14.8533C15.6303,14.0722,15.6303,12.8059,14.8492,12.0248Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(0, 1);" ontouchstart="movtionButton(0, 1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="15.435030017195288" height="26.87807685863504" viewBox="0 0 15.435030017195288 26.87807685863504"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M14.8492,12.0248L3.41422,0.589796C2.15429,-0.670133,-9.53674e-7,0.222199,9.53674e-7,2.00401L9.53674e-7,24.8741C-9.53674e-7,26.6559,2.15429,27.5482,3.41421,26.2883L14.8492,14.8533C15.6303,14.0722,15.6303,12.8059,14.8492,12.0248Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
                             </div>
                             <div>
-                                <label><button class="cc-btn" onmousedown="movtionButton(-0.3,-0.5);" ontouchstart="movtionButton(-0.3,-0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(0,-1,1,0,-23,23)"><path d="M0,25L0,41.1716C0,42.9534,2.15428,43.8457,3.41421,42.5858L19.5858,26.41421C20.8457,25.15428,19.9534,23,18.1716,23L2,23C0.895431,23,0,23.895431,0,25Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
-                                <label><button class="cc-btn" onmousedown="movtionButton(-0.5,-0.5);" ontouchstart="movtionButton(-0.5,-0.5);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="26.87807685863504" height="15.435030017195231" viewBox="0 0 26.87807685863504 15.435030017195231"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M14.8533,14.8492L26.2883,3.41422C27.5482,2.15429,26.6559,-9.53674e-7,24.8741,9.53674e-7L2.00401,9.53674e-7C0.222199,-9.53674e-7,-0.670133,2.15429,0.589795,3.41421L12.0248,14.8492C12.8059,15.6303,14.0722,15.6303,14.8533,14.8492Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
-                                <label><button class="cc-btn" onmousedown="movtionButton(-0.5,-0.3);" ontouchstart="movtionButton(-0.5,-0.3);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(-1,0,0,-1,46,46)"><path d="M23,25L23,41.1716C23,42.9534,25.15428,43.8457,26.41421,42.5858L42.5858,26.41421C43.8457,25.15428,42.9534,23,41.1716,23L25,23C23.895431,23,23,23.895431,23,25Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(-1,-1);" ontouchstart="movtionButton(-1,-1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(0,-1,1,0,-23,23)"><path d="M0,25L0,41.1716C0,42.9534,2.15428,43.8457,3.41421,42.5858L19.5858,26.41421C20.8457,25.15428,19.9534,23,18.1716,23L2,23C0.895431,23,0,23.895431,0,25Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(-1, 0);" ontouchstart="movtionButton(-1, 0);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="26.87807685863504" height="15.435030017195231" viewBox="0 0 26.87807685863504 15.435030017195231"><g style="mix-blend-mode:passthrough" transform="matrix(0.9999999403953552,0,0,0.9999999403953552,0,0)"><path d="M14.8533,14.8492L26.2883,3.41422C27.5482,2.15429,26.6559,-9.53674e-7,24.8741,9.53674e-7L2.00401,9.53674e-7C0.222199,-9.53674e-7,-0.670133,2.15429,0.589795,3.41421L12.0248,14.8492C12.8059,15.6303,14.0722,15.6303,14.8533,14.8492Z" fill="#D8D8D8" fill-opacity="0.800000011920929"/></g></svg></button></label>
+                                <label><button class="cc-btn" onmousedown="movtionButton(-1, 1);" ontouchstart="movtionButton(-1, 1);" onmouseup="movtionButton(0,0);" ontouchend="movtionButton(0,0);"><svg fill="none" version="1.1" width="23" height="23" viewBox="0 0 23 23"><g style="mix-blend-mode:passthrough" transform="matrix(-1,0,0,-1,46,46)"><path d="M23,25L23,41.1716C23,42.9534,25.15428,43.8457,26.41421,42.5858L42.5858,26.41421C43.8457,25.15428,42.9534,23,41.1716,23L25,23C23.895431,23,23,23.895431,23,25Z" fill="#D8D8D8" fill-opacity="0.20000000298023224"/></g></svg></button></label>
                             </div>
                         </div>
                     </div>
                     <div class="control-speed">
                         <div>
-                            <div id="device-gimbal-btn_A">
-                                <label><button name="speedbtn" class="small-btn" onmousedown="gimbalCtrl(1);" ontouchstart="gimbalCtrl(1);" onmouseup="gimbalCtrl(0);" ontouchend="gimbalCtrl(0);">UP</button></label>
-                            </div>
-                        </div>
-                        <br>
-                        <div>
-                            <div id="device-gimbal-btn_B">
-                                <label><button name="speedbtn" class="small-btn" onmousedown="gimbalCtrl(3);" ontouchstart="gimbalCtrl(3);" onmouseup="gimbalCtrl(0);" ontouchend="gimbalCtrl(0);">LEFT</button></label>
-                                <label><button name="speedbtn" class="small-btn" onmousedown="gimbalCtrl(5);" ontouchstart="gimbalCtrl(5);" onmouseup="gimbalCtrl(0);" ontouchend="gimbalCtrl(0);">FOEWARD</button></label>
-                                <label><button name="speedbtn" class="small-btn" onmousedown="gimbalCtrl(4);" ontouchstart="gimbalCtrl(4);" onmouseup="gimbalCtrl(0);" ontouchend="gimbalCtrl(0);">RIGHT</button></label>
-                            </div>
-                        </div>
-                        <br>
-                        <div>
-                            <div id="device-gimbal-btn_C">
-                                <label><button name="speedbtn" class="small-btn" onmousedown="gimbalCtrl(2);" ontouchstart="gimbalCtrl(2);" onmouseup="gimbalCtrl(0);" ontouchend="gimbalCtrl(0);">DOWN</button></label>
-                            </div>
-                        </div>
-                        <br>
-                        <div>
                             <div id="device-gimbal-btn_D">
-                                <label><button name="speedbtn" class="small-btn" onclick="gimbalSteady(1,read_Y);">STEADY START</button></label>
-                                <label><button name="speedbtn" class="small-btn" onclick="gimbalSteady(0,read_Y);">STEADY END</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick='sendJsonCmd("{\"T\":112,\"func\":4}");'>STEADY START</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick='sendJsonCmd("{\"T\":112,\"func\":5}");'>STEADY STOP</button></label>
                             </div>
                         </div>
                         <br>
                         <br>
                         <div>
                             <div id="device-speed-btn">
-                                <label><button name="speedbtn" class="small-btn" onclick="changeSpeed(0.3);">SLOW</button></label>
-                                <label><button name="speedbtn" class="small-btn" onclick="changeSpeed(0.6);">MIDDLE</button></label>
-                                <label><button name="speedbtn" class="small-btn" onclick="changeSpeed(1.0);">FAST</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick='sendJsonCmd("{\"T\":112,\"func\":1}");'>StayLow</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick='sendJsonCmd("{\"T\":112,\"func\":2}");'>HandShake</button></label>
+                                <label><button name="speedbtn" class="small-btn" onclick='sendJsonCmd("{\"T\":112,\"func\":3}");'>Jump</button></label>
                             </div>
                         </div>
                         <br>
                         <div>
-                            <div id="device-led-btn">
+                            <!-- <div id="device-led-btn">
                                 <label><button name="speedbtn" class="small-btn" onclick="ledCtrl(1);">IO4</button></label>
                                 <label><button name="speedbtn" class="small-btn" onclick="ledCtrl(2);">IO5</button></label>
                                 <label><button name="speedbtn" class="small-btn" onclick="ledCtrl(0);">OFF</button></label>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -388,232 +314,99 @@ const char index_html[] PROGMEM = R"rawliteral(
                 </div>
                 <div class="info-box json-cmd-info">
                     <div>
-                        <p>EMERGENCY_STOP: <span id="cmd0" class="cmd-value">{"T":0}</span> </p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd0');">INPUT</button>
+                        <p>CMD_JOINT_MIDDLE: <span id="cmd101" class="cmd-value">{"T":101}</span> </p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd101');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_RESET_EMERGENCY: <span id="cmd999" class="cmd-value">{"T":999}</span> </p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd999');">INPUT</button>
+                        <p>CMD_RELEASE_TORQUE: <span id="cmd102" class="cmd-value">{"T":102}</span> </p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd102');">INPUT</button>
                     </div>
                     <div>
-                        <p>SPEED_CTRL: <span id="cmd1" class="cmd-value">{"T":1,"L":0.5,"R":0.5}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd1');">INPUT</button>
+                        <p>CMD_SINGLE_SERVO_CTRL: <span id="cmd103" class="cmd-value">{"T":103,"id":1,"goal":511,"time":0,"spd":0}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd103');">INPUT</button>
                     </div>
                     <div>
-                        <p>PID_SET: <span id="cmd2" class="cmd-value">{"T":2,"P":200,"I":2500,"D":0,"L":255}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd2');">INPUT</button>
+                        <p>CMD_GET_JOINTS_ZERO: <span id="cmd104" class="cmd-value">{"T":104}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd104');">INPUT</button>
+                    </div>
+
+                    <div>
+                        <p>CMD_SET_JOINTS_ZERO: <span id="cmd105" class="cmd-value">{"T":105,"set":[511,511,511,511,511,511,511,511,511,511,511,511]}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd105');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_PWM_INPUT: <span id="cmd11" class="cmd-value">{"T":11,"L":164,"R":164}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd11');">INPUT</button>
+                        <p>CMD_GET_CURRENT_POS: <span id="cmd106" class="cmd-value">{"T":106}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd106');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_ROS_CTRL: <span id="cmd13" class="cmd-value">{"T":13,"X":0.1,"Z":0.3}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd13');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>OLED_SET: <span id="cmd3" class="cmd-value">{"T":3,"lineNum":0,"Text":"putYourTextHere"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd3');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>OLED_DEFAULT: <span id="cmd-3" class="cmd-value">{"T":-3}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd-3');">INPUT</button>
+                        <p>CMD_SET_CURRENT_POS_ZERO: <span id="cmd107" class="cmd-value">{"T":107}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd107');">INPUT</button>
                     </div>
                 </div>
                 <div class="info-box json-cmd-info">
                     <div>
-                        <p>CMD_MODULE_TYPE: <span id="cmd4" class="cmd-value">{"T":4,"cmd":1}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd4');">INPUT</button>
+                        <p>CMD_BASIC_MOVE: <span id="cmd111" class="cmd-value">{"T":111,"FB":0,"LR":0}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd111');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_EOAT_TYPE: <span id="cmd-124" class="cmd-value">{"T":124,"mode":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd-124');">INPUT</button>
+                        <p>CMD_BASIC_FUNC: <span id="cmd112" class="cmd-value">{"T":112,"func":2}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd112');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_CONFIG_EOAT: <span id="cmd-125" class="cmd-value">{"T":125,"pos":3,"ea":0,"eb":20}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd-125');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_GET_IMU_DATA: <span id="cmd126" class="cmd-value">{"T":126}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd126');">INPUT</button>
+                        <p>CMD_SINGLE_LEG_CTRL: <span id="cmd113" class="cmd-value">{"T":113,"leg":1,"x":16,"y":90,"z":25}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd113');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_CALI_IMU_STEP: <span id="cmd127" class="cmd-value">{"T":127,"step":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd127');">INPUT</button>
+                        <p>CMD_SET_INTERPOLATION_PARAMS: <span id="cmd115" class="cmd-value">{"T":115,"delay":5,"iterate":0.02}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd115');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GET_IMU_OFFSET: <span id="cmd128" class="cmd-value">{"T":128}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd128');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SET_IMU_OFFSET: <span id="cmd129" class="cmd-value">{"T":129,"x":-12,"y":0,"z":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd129');">INPUT</button>
+                        <p>CMD_SET_GAIT_PARAMS: <span id="cmd116" class="cmd-value">{"T":116,"maxHeight":110,"minHeight":75,"height":95,"lift":9,"range":40,"acc":5,"extendedX":16,"extendedZ":25,"sideMax":30,"massAdjust":21}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd116');">INPUT</button>
                     </div>
                 </div>
                 <div class="info-box json-cmd-info">
                     <div>
-                        <p>CMD_BASE_FEEDBACK: <span id="cmd130" class="cmd-value">{"T":130}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd130');">INPUT</button>
+                        <p>CMD_SET_COLOR: <span id="cmd201" class="cmd-value">{"T":201,"set":[0,9,0,0]}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd201');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_BASE_FEEDBACK_FLOW: <span id="cmd131" class="cmd-value">{"T":131,"cmd":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd131');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_LED_CTRL: <span id="cmd132" class="cmd-value">{"T":132,"IO4":255,"IO5":255}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd132');">INPUT</button>
+                        <p>CMD_DISPLAY_SINGLE: <span id="cmd202" class="cmd-value">{"T":202,"line":1,"text":"Hello, world!","update":1}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd202');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GIMBAL_CTRL_SIMPLE: <span id="cmd133" class="cmd-value">{"T":133,"X":45,"Y":45,"SPD":0,"ACC":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd133');">INPUT</button>
+                        <p>CMD_DISPLAY_UPDATE: <span id="cmd203" class="cmd-value">{"T":203}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd203');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GIMBAL_CTRL_MOVE: <span id="cmd134" class="cmd-value">{"T":134,"X":45,"Y":45,"SX":300,"SY":300}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd134');">INPUT</button>
+                        <p>CMD_DISPLAY_FRAME: <span id="cmd204" class="cmd-value">{"T":204,"l1":"Hello, world!","l2":"Hello, world!","l3":"Hello, world!","l4":"Hello, world!"}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd204');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GIMBAL_CTRL_STOP: <span id="cmd135" class="cmd-value">{"T":135}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd135');">INPUT</button>
+                        <p>CMD_DISPLAY_CLEAR: <span id="cmd205" class="cmd-value">{"T":205}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd205');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GIMBAL_STEADY: <span id="cmd137" class="cmd-value">{"T":137,"s":1,"y":0}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd137');">INPUT</button>
+                        <p>CMD_DISPLAY_CLEAR: <span id="cmd205" class="cmd-value">{"T":205}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd205');">INPUT</button>
                     </div>
-                </div>
-                <div class="info-box json-cmd-info">
                     <div>
-                        <p>CMD_HEART_BEAT_SET: <span id="cmd136" class="cmd-value">{"T":136,"cmd":3000}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd136');">INPUT</button>
+                        <p>CMD_BUZZER_CTRL: <span id="cmd206" class="cmd-value">{"T":206,"freq":1000,"duration":10}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd206');">INPUT</button>
+                    </div>
+                    <div>
+                        <p>CMD_GET_BATTERY_VOLTAGE: <span id="cmd207" class="cmd-value">{"T":207}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd207');">INPUT</button>
                     </div>
                 </div>
                 <div class="info-box json-cmd-info">
                     <div>
-                        <p>CMD_SET_SPD_RATE: <span id="cmd138" class="cmd-value">{"T":138,"L":1,"R":1}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd138');">INPUT</button>
+                        <p>CMD_FORMAT_FLASH: <span id="cmd399" class="cmd-value">{"T":399}</span></p>
+                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd399');">INPUT</button>
                     </div>
                     <div>
-                        <p>CMD_GET_SPD_RATE: <span id="cmd139" class="cmd-value">{"T":139}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd139');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SAVE_SPD_RATE: <span id="cmd140" class="cmd-value">{"T":140}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd140');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_MISSION_CONTENT: <span id="cmd221" class="cmd-value">{"T":221,"name":"mission_a"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd221');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_APPEND_STEP_JSON: <span id="cmd222" class="cmd-value">{"T":222,"name":"mission_a","step":"{\"T\":137,\"s\":1,\"y\":0}"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd222');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_BROADCAST_FOLLOWER: <span id="cmd300" class="cmd-value">{"T":300,"mode":1}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd300');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_ESP_NOW_CONFIG: <span id="cmd301" class="cmd-value">{"T":301,"mode":3}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd301');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_GET_MAC_ADDRESS: <span id="cmd302" class="cmd-value">{"T":302}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd302');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_ESP_NOW_ADD_FOLLOWER: <span id="cmd303" class="cmd-value">{"T":303,"mac":"FF:FF:FF:FF:FF:FF"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd303');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_ESP_NOW_REMOVE_FOLLOWER: <span id="cmd304" class="cmd-value">{"T":304,"mac":"FF:FF:FF:FF:FF:FF"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd304');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_ESP_NOW_GROUP_CTRL: <span id="cmd305" class="cmd-value">{"T":305,"dev":0,"b":0,"s":0,"e":1.57,"h":1.57,"cmd":0,"megs":"hello!"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd305');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_ESP_NOW_SINGLE: <span id="cmd306" class="cmd-value">{"T":306,"mac":"FF:FF:FF:FF:FF:FF","dev":0,"b":0,"s":0,"e":1.57,"h":1.57,"cmd":0,"megs":"hello!"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd306');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_WIFI_ON_BOOT: <span id="cmd401" class="cmd-value">{"T":401,"cmd":3}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd401');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SET_AP: <span id="cmd402" class="cmd-value">{"T":402,"ssid":"RoArm-M2","password":"12345678"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd402');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SET_STA: <span id="cmd403" class="cmd-value">{"T":403,"ssid":"na","password":"ps"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd403');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_WIFI_APSTA: <span id="cmd404" class="cmd-value">{"T":404,"ap_ssid":"RoArm-M2","ap_password":"12345678","sta_ssid":"na","sta_password":"ps"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd404');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_WIFI_INFO: <span id="cmd405" class="cmd-value">{"T":405}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd405');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_WIFI_CONFIG_CREATE_BY_STATUS: <span id="cmd406" class="cmd-value">{"T":406}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd406');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_WIFI_CONFIG_CREATE_BY_INPUT: <span id="cmd406" class="cmd-value">{"T":407,"mode":3,"ap_ssid":"RoArm-M2","ap_password":"12345678","sta_ssid":"na","sta_password":"ps"}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd406');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_SET_SERVO_ID: <span id="cmd501" class="cmd-value">{"T":501,"raw":1,"new":11}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd501');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SET_MIDDLE: <span id="cmd502" class="cmd-value">{"T":502,"id":11}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd502');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_SET_SERVO_PID: <span id="cmd503" class="cmd-value">{"T":503,"id":14,"p":16}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd503');">INPUT</button>
-                    </div>
-                </div>
-                <div class="info-box json-cmd-info">
-                    <div>
-                        <p>CMD_REBOOT: <span id="cmd600" class="cmd-value">{"T":600}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd600');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_FREE_FLASH_SPACE: <span id="cmd601" class="cmd-value">{"T":601}</span></p>
+                        <p>CMD_CLEAR_NVS: <span id="cmd601" class="cmd-value">{"T":601}</span></p>
                         <button class="w-btn" onclick="cmdFill('jsonData', 'cmd601');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_BOOT_MISSION_INFO: <span id="cmd602" class="cmd-value">{"T":602}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd602');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_RESET_BOOT_MISSION: <span id="cmd603" class="cmd-value">{"T":603}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd603');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_NVS_CLEAR: <span id="cmd604" class="cmd-value">{"T":604}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd604');">INPUT</button>
-                    </div>
-                    <div>
-                        <p>CMD_INFO_PRINT: <span id="cmd605" class="cmd-value">{"T":605,"cmd":1}</span></p>
-                        <button class="w-btn" onclick="cmdFill('jsonData', 'cmd605');">INPUT</button>
                     </div>
                 </div>
             </div>
@@ -760,6 +553,13 @@ const char index_html[] PROGMEM = R"rawliteral(
             xhr.open("GET", "js?json=" + jsonString, true);
             xhr.send();
         }
+    }
+    function sendJsonCmd(inputCmd) {
+        var jsonCmd = JSON.parse(inputCmd);
+        var jsonString = JSON.stringify(jsonCmd);
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "js?json=" + jsonString, true);
+        xhr.send();
     }
     function movtionButton(FB, LR){
         left_speed  = FB;
