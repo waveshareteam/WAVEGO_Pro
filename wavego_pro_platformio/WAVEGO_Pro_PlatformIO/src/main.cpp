@@ -30,6 +30,8 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput);
 void runMission(String missionName, int intervalTime, int loopTimes);
 void buzzerCtrl(int freq, int duration);
 bool steadyMode = 0; // steady mode
+unsigned long previousMillisFB = 0;
+const unsigned long intervalFB = 5000;
 
 // Create AsyncWebServer object on port 80
 WebServer server(80);
@@ -72,11 +74,12 @@ void setup() {
   InitICM20948();
   InitINA219();
 
+  
   led.init();
   led.setColor(0, 255, 0, 64);
   led.setColor(1, 64, 0, 255);
 
-  filesCtrl.init();
+  // filesCtrl.init();
 
   bodyCtrl.init();
 
@@ -91,7 +94,7 @@ void setup() {
   pinMode(DEBUG_PIN, INPUT_PULLDOWN);
   
   pinMode(BUZZER_PIN, OUTPUT);
-  buzzerCtrl(2000, 5);
+  buzzerCtrl(2000, 50);
 
   if(!filesCtrl.checkMission("boot")) {
     filesCtrl.createMission("boot", "this is the boot mission.");
@@ -121,6 +124,26 @@ void setup() {
   }
 
   webCtrlServer();
+
+
+  ServoMiddlePWM[0] = 368;
+  ServoMiddlePWM[1] = 623;
+  ServoMiddlePWM[2] = 521;
+  ServoMiddlePWM[3] = 495;
+
+  ServoMiddlePWM[4] = 364;
+  ServoMiddlePWM[5] = 672;
+  ServoMiddlePWM[6] = 665;
+  ServoMiddlePWM[7] = 417;
+
+  ServoMiddlePWM[8] = 497;
+  ServoMiddlePWM[9] = 529;
+  ServoMiddlePWM[10] = 654;
+  ServoMiddlePWM[11] = 374;
+
+  // {"T":105,"set":[368,623,521,495,364,672,665,417,497,529,654,374]}
+
+  bodyCtrl.setJointsZeroPosArray(ServoMiddlePWM);
 }
 
 
@@ -194,6 +217,15 @@ void jsonCmdReceiveHandler(const JsonDocument& jsonCmdInput){
   int cmdType;
   cmdType = jsonCmdInput["T"].as<int>();
   switch(cmdType){
+  case CMD_UGV_CTRL:
+                        bodyCtrl.ugvCtrl(jsonCmdInput["L"],
+                                         jsonCmdInput["R"]);
+                        break;
+  case CMD_PT_CTRL:
+                        bodyCtrl.ptCtrl(jsonCmdInput["X"],
+                                        jsonCmdInput["Y"]);
+                        break;
+
 	case CMD_JOINT_MIDDLE:
                         bodyCtrl.jointMiddle();
                         break;
@@ -513,11 +545,27 @@ void loop() {
   if (steadyMode == 1) {
     accXYZUpdate();
     bodyCtrl.balancing(ACC_X, ACC_Y);
-    // bodyCtrl.balancing(ACC_X, 0);
   } else {
     bodyCtrl.robotCtrl();
   }
   wireDebugDetect();
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillisFB >= intervalFB) {
+    previousMillisFB = currentMillis;
+    InaDataUpdate();
+    jsonFeedback.clear();
+    jsonFeedback["T"] = 1001;
+    jsonFeedback["L"] = 0;
+    jsonFeedback["R"] = 0;
+    jsonFeedback["r"] = 0;
+    jsonFeedback["p"] = 0;
+    jsonFeedback["v"] = loadVoltage_V;
+    jsonFeedback["pan"] = 0;
+    jsonFeedback["tilt"] = 0;
+    serializeJson(jsonFeedback, outputString);
+    Serial.println(outputString);
+  }
 
   // accXYZUpdate();
   // Serial.print("ACC_X: ");Serial.println(ACC_X);

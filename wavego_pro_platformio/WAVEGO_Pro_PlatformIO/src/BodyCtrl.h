@@ -95,6 +95,9 @@ public:
     
     void pitchYawRoll(float pitchInput, float yawInput, float rollInput);
     void steadyCtrl(int cmd);
+
+    void ugvCtrl(float leftSpd, float rightSpd);
+    void ptCtrl(float axisX, float axisY);
 };
 
 #endif // BODYCTRL_H

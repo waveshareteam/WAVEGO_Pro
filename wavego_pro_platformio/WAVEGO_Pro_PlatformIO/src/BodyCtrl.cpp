@@ -105,7 +105,7 @@ float BALANCE_PITCHU_BUFFER;
 float BALANCE_ROLL_BUFFER;
 float BALANCE_PITCHU_BASE = 0;
 float BALANCE_ROLL_BASE   = 0;
-float BALANCE_P = 0.0000001;
+float BALANCE_P = 0.72;
 
 float GLOBAL_STEP  = 0;
 int   STEP_DELAY   = 5;
@@ -727,8 +727,8 @@ void BodyCtrl::pitchYawRoll(float pitchInput, float yawInput, float rollInput){
 
 // BALANCE
 void BodyCtrl::balancing(float ACC_Y, float ACC_X){
-    BALANCE_PITCHU_BUFFER += ACC_Y * BALANCE_P;
-    BALANCE_ROLL_BUFFER -= ACC_X * BALANCE_P;
+    BALANCE_PITCHU_BUFFER += ACC_X * BALANCE_P;
+    BALANCE_ROLL_BUFFER -= ACC_Y * BALANCE_P;
   
     if(BALANCE_PITCHU_BUFFER > 21){BALANCE_PITCHU_BUFFER = 21;}
     if(BALANCE_PITCHU_BUFFER < -21){BALANCE_PITCHU_BUFFER = -21;}
@@ -740,7 +740,7 @@ void BodyCtrl::balancing(float ACC_Y, float ACC_X){
     pitchYawRoll(BALANCE_PITCHU_BUFFER, 0, BALANCE_ROLL_BUFFER);
 
     allJointAngle(GoalAngle);
-    delay(30);
+    delay(1);
 }
 
 // mass center adjust test.
@@ -945,4 +945,40 @@ void BodyCtrl::functionJump(){
     allJointAngle(GoalAngle);
     delay(12);
   }
+}
+
+void BodyCtrl::ugvCtrl(float leftSpd, float rightSpd){
+  if (leftSpd == rightSpd) {
+    if (leftSpd == 0) {
+      inputCmd(0, 0);
+    } else if (leftSpd > 0) {
+      inputCmd(1, 0);
+    } else if (leftSpd < 0) {
+      inputCmd(-1, 0);
+    }
+    return;
+  } else if (leftSpd == -rightSpd) {
+    if (leftSpd > 0) {
+      inputCmd(0, 1);
+    } else if (leftSpd < 0) {
+      inputCmd(0, -1);
+    }
+    return;
+  } else {
+    if (leftSpd > 0 && rightSpd > 0 && abs(leftSpd) > abs(rightSpd)) {
+      inputCmd(1, 1);
+    } else if (leftSpd < 0 && rightSpd < 0 && abs(leftSpd) < abs(rightSpd)) {
+      inputCmd(-1, -1);
+    } else if (leftSpd > 0 && rightSpd > 0 && abs(leftSpd) < abs(rightSpd)) {
+      inputCmd(1, -1);
+    } else if (leftSpd < 0 && rightSpd < 0 && abs(leftSpd) > abs(rightSpd)) {
+      inputCmd(-1, 1);
+    }
+  }
+}
+
+void BodyCtrl::ptCtrl(float axisX, float axisY){
+  double pit = mapDouble(axisY, -30, 30, -17.5, 17.5);
+  double yaw = mapDouble(axisX, -180, 180, -30, 30);
+  pitchYawRoll(pit, yaw, 0);
 }

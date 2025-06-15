@@ -1,9 +1,14 @@
+#include <SimpleKalmanFilter.h>
+
+// SimpleKalmanFilter(e_mea, e_est, q);
+SimpleKalmanFilter xKalmanFilter(0.01, 0.01, 0.01);
+SimpleKalmanFilter yKalmanFilter(0.01, 0.01, 0.01);
+
 #include <ICM20948_WE.h>
 #define ICM20948_ADDR 0x68
 
 float ACC_X;
 float ACC_Y;
-float ACC_Z;
 
 ICM20948_WE myIMU = ICM20948_WE(ICM20948_ADDR);
 
@@ -20,14 +25,13 @@ void InitICM20948(){
 void accXYZUpdate(){
   xyzFloat gValue;
   myIMU.readSensor();
-  // xyzFloat accRaw = myIMU.getAccRawValues();
-  // xyzFloat corrAccRaw = myIMU.getCorrectedAccRawValues();
-  // xyzFloat gVal = myIMU.getGValues();
-  myIMU.getGValues(&gValue);
+  myIMU.getAccRawValues(&gValue);
 
-  ACC_X = gValue.x;
-  ACC_Y = gValue.y;
-  ACC_Z = gValue.z;
+  // ACC_X = xKalmanFilter.updateEstimate(gValue.x / 16384.0);
+  // ACC_Y = yKalmanFilter.updateEstimate(gValue.y / 16384.0);
+
+  ACC_X = gValue.x / 16384.0;
+  ACC_Y = gValue.y / 16384.0;
 }
 
 

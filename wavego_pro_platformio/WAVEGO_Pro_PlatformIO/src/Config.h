@@ -22,7 +22,7 @@
 // --- Debug Configuration ---
 // 1: print debug info
 // 0: do not print debug info
-static int InfoPrint = 1;
+static int InfoPrint = 0;
 
 // serial baud rate
 #define BAUD_RATE 921600
@@ -33,6 +33,13 @@ static int timeOffset = 50;
 
 
 // --- Command Configuration ---
+// UGV ctrl interface
+// {"T":1,"L":0,"R":0}
+#define CMD_UGV_CTRL 1
+// PT interface
+// {"T":133,"X":0,"Y":0}
+#define CMD_PT_CTRL 133
+
 // Body Ctrl
 // {"T":101}
 #define CMD_JOINT_MIDDLE 101
