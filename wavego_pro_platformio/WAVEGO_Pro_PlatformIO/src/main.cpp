@@ -79,8 +79,8 @@ void setup() {
   led.setColor(0, 255, 0, 64);
   led.setColor(1, 64, 0, 255);
 
-  // filesCtrl.init();
-
+  filesCtrl.init();
+  
   bodyCtrl.init();
 
   /* 
@@ -122,6 +122,8 @@ void setup() {
     wireless.espnowInit(false);
     wireless.setJsonCommandCallback(jsonCmdReceiveHandler);
   }
+
+  // wireless.setAP("WAVEGO", "12345678", 1);
 
   webCtrlServer();
 

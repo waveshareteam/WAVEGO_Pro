@@ -12,11 +12,13 @@ void FilesCtrl::init() {
             Serial.println("nvs_flash_init() success");
         } else {
             Serial.println("nvs_flash_init() failed");
+            flash();
         }
         if (LittleFS.begin()) {
             Serial.println("LittleFS.begin() success");
         } else {
             Serial.println("LittleFS.begin() failed");
+            flash();
         }
         flashStatus = true;
     }
