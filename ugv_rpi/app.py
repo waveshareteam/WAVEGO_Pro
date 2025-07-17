@@ -14,9 +14,9 @@ def is_raspberry_pi5():
                     return False
 
 if is_raspberry_pi5():
-    base = BaseController('/dev/ttyAMA0', 921600)
+    base = BaseController('/dev/ttyAMA0', 115200)
 else:
-    base = BaseController('/dev/serial0', 921600)
+    base = BaseController('/dev/serial0', 115200)
 
 threading.Thread(target=lambda: base.breath_light(15), daemon=True).start()
 

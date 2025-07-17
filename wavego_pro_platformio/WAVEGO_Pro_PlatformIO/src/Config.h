@@ -25,7 +25,7 @@
 static int InfoPrint = 0;
 
 // serial baud rate
-#define BAUD_RATE 921600
+#define BAUD_RATE 115200
 
 // processing time adjustment
 static int timeOffset = 50;

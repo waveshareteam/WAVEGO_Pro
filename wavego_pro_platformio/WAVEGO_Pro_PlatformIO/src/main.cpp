@@ -48,6 +48,7 @@ void webCtrlServer(){
     deserializeJson(jsonCmdReceive, jsonCmdWebString);
     jsonCmdReceiveHandler(jsonCmdReceive);
     serializeJson(jsonFeedback, outputString);
+    Serial.println(jsonCmdWebString);
     server.send(200, "text/plane", outputString);
     outputString = "";
     jsonFeedback.clear();
@@ -545,7 +546,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   serialCtrl();
   server.handleClient();
-  
+
   if (steadyMode == 1) {
     accXYZUpdate();
     bodyCtrl.balancing(ACC_X, ACC_Y);

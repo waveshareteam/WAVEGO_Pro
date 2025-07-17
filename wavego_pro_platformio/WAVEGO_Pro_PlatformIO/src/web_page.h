@@ -456,9 +456,9 @@ const char index_html[] PROGMEM = R"rawliteral(
     //     getDevInfo();
     // }, 2510);
 
-    setInterval(function() {
-        heartBeat();
-    }, 1500);
+    // setInterval(function() {
+    //     heartBeat();
+    // }, 1500);
 
     // setInterval(function() {
     //     infoUpdate();
@@ -541,19 +541,19 @@ const char index_html[] PROGMEM = R"rawliteral(
     // function changeSpeed(inputSpd) {
     //     speed_rate = inputSpd;
     // }
-    function heartBeat() {
-        if (send_heartbeat == 1) {
-            var jsonCmd = {
-                "T":1,
-                "FB":left_speed,
-                "LR":right_speed
-            }
-            var jsonString = JSON.stringify(jsonCmd);
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "js?json=" + jsonString, true);
-            xhr.send();
-        }
-    }
+    // function heartBeat() {
+    //     if (send_heartbeat == 1) {
+    //         var jsonCmd = {
+    //             "T":1,
+    //             "FB":left_speed,
+    //             "LR":right_speed
+    //         }
+    //         var jsonString = JSON.stringify(jsonCmd);
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open("GET", "js?json=" + jsonString, true);
+    //         xhr.send();
+    //     }
+    // }
     function sendJsonCmd(inputCmd) {
         var jsonCmd = JSON.parse(inputCmd);
         var jsonString = JSON.stringify(jsonCmd);
