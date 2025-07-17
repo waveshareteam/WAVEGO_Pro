@@ -544,6 +544,8 @@ void serialCtrl() {
 void loop() {
   // put your main code here, to run repeatedly:
   serialCtrl();
+  server.handleClient();
+  
   if (steadyMode == 1) {
     accXYZUpdate();
     bodyCtrl.balancing(ACC_X, ACC_Y);
