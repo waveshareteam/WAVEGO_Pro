@@ -75,12 +75,16 @@ Scan for local WiFi networks and connect to a new one or change the password to 
 6 = Change Hostname
 Change the system Hostname, so a connection can be made by name instead of an IP
 
-7 = Uninstall AccessPopup
+7 = When Wifi is Disabled: re-activate Y/N
+If the system wifi is disabled the AccessPopup script will re-activate. 
+If this is managed elsewhere on the system then this feature can be disabled. 
+
+8 = Uninstall AccessPopup
 Uninstall the AccessPopup script and return the PI to its default wifi setup.
 
-8 = Run AccessPopup now. It will decide between a suitable WiFi network or AP
+9 = Run AccessPopup now. It will decide between a suitable WiFi network or AP
 
-9 = Exit
+10 = Exit
 
  
 

@@ -1,6 +1,6 @@
 #!/bin/bash
-#version 0.8-6
-#date 12 July 2024
+#version 0.8-9
+#date 16 April 2025
 #Copyright Graeme Richards - RaspberryConnect.com
 #Released under the GPL3 Licence (https://www.gnu.org/licenses/gpl-3.0.en.html)
 
@@ -203,6 +203,9 @@ wifi_is_off()
 		fi
 		echo "Wifi has been re-activated"
 		sleep 10 #delay to allow wifi to initialise
+	elif [[ $w = 'disabled' ]] && [[ $re_enable_wifi = 'n' ]] ; then
+		echo "Wifi is disabled and re-activation is disabled in accesspopup. No action"
+		exit
 	fi
 }
 
@@ -219,14 +222,17 @@ start_ap()
 	if [ $ex -eq 0 ];then
 		ap_new_profile #if known AP profile not found, create it
 	fi
+	check_pizerow
 	apup=$((nmcli connection up "$ap_profile_name" ) 2>&1)
 	stat=$?
 	if [ $stat -ne 0 ] ; then
 		#activating AP failed
 		#this may be because the AP device has been manually changed, ie wlan0 to wlan1
 		#issue with AP profile, delete and renew
+		nmcli device down $wdev0
 		nmcli connection delete "$ap_profile_name"
 		ap_new_profile
+		nmcli device up $wdev0
 		echo "The AccessPoint profile has been renewed due to an issue while activating it."
 	fi
 	sleep 3 #give time for ap to be setup
@@ -272,14 +278,31 @@ start_nw()
 	fi
 }
 
+check_pizerow()
+{
+con="$(nmcli connection show $ap_profile_name | grep 802-11-wireless-security.proto)"
+zero="$(cat /proc/cpuinfo | grep Revision)"
+bit="$( getconf LONG_BIT )"
+stat=$?
+if [ "${con: -3}" == "rsn" ] && [ "${bit: -2}" == "32" ; then
+	#Adjusting Wifi Security for PiZeroW and 32 bit OS"
+	nmcli connection modify "$ap_profile_name" 802-11-wireless-security.group "" 802-11-wireless-security.pairwise "" 802-11-wireless-security.proto ""
+elif [ "${con: -3}" == "" ] && [ "${bit: -2}" != "64" ; then
+	nmcli connection modify "$ap_profile_name" 802-11-wireless-security.proto rsn 802-11-wireless-security.group "" 802-11-wireless-security.pairwise ""
+fi
+nmcli connection reload
+}
+
 #Function Create AP profile
 ap_new_profile()
 {
 #Create a AP profile
 nmcli device wifi hotspot ifname $wdev0 con-name "$ap_profile_name" ssid "$ap_ssid" band bg channel 6 password "$ap_pw" >/dev/null 2>&1
-nmcli connection modify "$ap_profile_name" ipv4.method shared ipv4.addr "$ap_ip" ipv4.gateway "$ap_gate" 802-11-wireless-security.group "" 802-11-wireless-security.pairwise "" 802-11-wireless-security.proto "" >/dev/null 2>&1
+nmcli connection modify "$ap_profile_name" ipv4.method shared ipv4.addr "$ap_ip" ipv4.gateway "$ap_gate" 802-11-wireless-security.group "ccmp" 802-11-wireless-security.pairwise "ccmp" 802-11-wireless-security.proto "" >/dev/null 2>&1
+nmcli connection modify "$ap_profile_name" wifi.powersave disable
 ap_profile+="$ap_profile_name"
 nmcli connection reload
+check_pizerow
 }
 
 #Main

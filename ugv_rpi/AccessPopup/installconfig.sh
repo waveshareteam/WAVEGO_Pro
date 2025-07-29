@@ -1,5 +1,5 @@
 #!/bin/bash
-ver="0.8-6.3: 12 March 2024"
+ver="0.8-8: 16 Apr 2025"
 #Copyright Graeme Richards - RaspberryConnect.com
 #Released under the GPL3 Licence (https://www.gnu.org/licenses/gpl-3.0.en.html)
 
@@ -64,6 +64,33 @@ else
 	fi
 fi
 
+#check if Hostapd is active as it is not required.
+installed='n'
+enabled='disabled'
+if dpkg -s "hostapd" >/dev/null 2>&1; then
+	i="$(dpkg -s hostapd)"
+	if [ $? -eq 0 ] ;then
+		installed='y'
+		if systemctl -all list-unit-files hostapd.service | grep "hostapd.service enabled" ;then
+			enabled='enabled'
+		fi
+	fi
+	if [ "$enabled" = 'enabled' ] ;then
+		echo "Hostapd is installed and enabled."
+		echo "Hostapd is not required and will conflict with a NetworkManager accesspoint"
+		echo "Please disable or uninstall hostapd if it is not required and try again"
+		echo "To disable hostapd use: sudo systemctl disable hostapd"
+		exit 1
+
+	elif [ "$installed" = 'y' ] ;then
+		echo "Hostapd is installed but not enabled at start up"
+		echo "Hostapd is not required and will conflict with a NetworkManager accesspoint"
+		echo "If there is any issues connecting with the AccessPoint used in AccessPopup then"
+		echo "please uninstall hostapd" 
+		read -p "Press a key to continue"
+	fi
+
+fi
 
 add_service()
 {
@@ -368,6 +395,35 @@ fi
 }
 
 
+reactivate()
+{
+	echo -e $YEL$BOL"Wifi re-activation options"$DEF
+	echo "When the devices wifi is disabled, AccessPopup will re-activate it"
+	echo "and then connect to a wifi network or generate an AccessPoint"
+	echo "If Wifi enable/disable is managed elsewhere on the system"
+	echo "then wifi re-activation can be disabled in AccessPopup."
+	re="$( grep -F 're_enable_wifi=' $script_path$scriptname )"
+	echo ""
+	echo -e $BOL"Current Status: $re"$DEF
+	echo ""
+	echo "Enter n to disable wifi reactivation and y to enable re-activation"
+	echo "press enter to keep the current setting"
+	read r
+	if [ ! -z "$r" ]; then
+		if [ $r = 'y' ]; then
+			sed -i "s/re_enable_wifi=.*/re_enable_wifi='y'/" "$script_path$scriptname"
+		elif [ $r = 'n' ]; then
+			sed -i "s/re_enable_wifi=.*/re_enable_wifi='n'/" "$script_path$scriptname"
+		fi
+	fi
+	re="$( grep -F 're_enable_wifi=' $script_path$scriptname )"
+	echo "The status is now: $re"
+	
+	
+	
+		
+}
+
 setupssid()
 {
 	echo -e $YEL$BOL"Add or Edit a Wifi Network"$DEF
@@ -609,6 +665,8 @@ go()
 		fi
 	elif [ "$opt" = "HST" ] ;then
 		namehost	
+	elif [ "$opt" = "DIS" ] ;then
+		reactivate		
 	fi
 	echo "Press any key to continue"
 	read
@@ -628,7 +686,7 @@ until [ "$select" = "9" ]; do
 	
 	echo -e $YEL"Raspberryconnect.com"
 	echo "AccessPopup installation and setup"
-	echo -e "Version $ver  Installs AccessPopup ver 0.8-6 12 July 2024"$DEF
+	echo -e "Version $ver  Installs AccessPopup ver 0.8-9 16 April 2025"$DEF
 	echo "Connects to your home network when you are home or a nearby know wifi network."
 	echo "If no known wifi network is found then an Access Point is automatically activated"
 	echo -e "until a known network is back in range\n"
@@ -650,9 +708,10 @@ until [ "$select" = "9" ]; do
 	echo " 4 = Live Switch between: Network WiFi <> Access Point"
 	echo " 5 = Setup a New WiFi Network or change the password to an existing Wifi Network"
 	echo " 6 = Change Hostname"
-	echo " 7 = Uninstall $scriptname"
-	echo " 8 = Run $scriptname now. It will decide between a suitable WiFi network or AP."
-	echo " 9 = Exit"
+	echo " 7 = When Wifi is Disabled: re-activate Y/N"
+	echo " 8 = Uninstall $scriptname"
+	echo " 9 = Run $scriptname now. It will decide between a suitable WiFi network or AP."
+	echo " 10 = Exit"
 	echo ""
 	echo "The Wifi status will be checked every 2 minutes. Switching will happen when a"
 	echo "valid wifi network comes in and out of range."
@@ -668,9 +727,10 @@ until [ "$select" = "9" ]; do
 	4) clear ; go "SWI" ;; #Live Switch: NW <> AP
 	5) clear ; go "NWK" ;; #Connect to New WiFi Network
 	6) clear ; go "HST" ;; #Change Hostname
-	7) clear ; go "UNI" ;; #Uninstall AccessPopup
-	8) clear ; go "RUN" ;; #Run the AccessPopup script now
-	9) clear ; exit ;;
+	7) clear ; go "DIS" ;; #Wifi reactivation options
+	8) clear ; go "UNI" ;; #Uninstall AccessPopup
+	9) clear ; go "RUN" ;; #Run the AccessPopup script now
+	10) clear ; exit ;;
 	*) clear; echo -e "Please select again\n";;
 	esac
 done

@@ -1,4 +1,8 @@
 installconfig.sh
+	ver 0.8-8 16 Apr 2025
+		Added the option to change the Wifi re-activation option in the accesspopup script for when Wifi has been disabled. 
+	ver 0.8-7 06 Oct 2024
+		added checks for a hostapd installation. Warns the user if hostapd is found but disabled or stops the script with a message if hostapd is active. Hostapd conflicts with a network manager accesspoint. 
 	ver 0.8-6 12 Mar 2024
 		Added Arch Linux Arm compatability when Network Manager is used.
 	ver 0.8-5 31 Jan 2024
@@ -20,6 +24,15 @@ installconfig.sh
 
 
 accesspopup
+	ver 0.0-9 16 Apr 2025
+		If wifi has been disabled on the system, when AccessPopup is run it would re-activate wifi. Some users may be managing their power usage by switching wifi off for periods of time.
+		So I have implemented a re_enable_wifi='y' option at the top of the script. This can be set to 'y' or 'n' as required. This can also be changed via the installer script.
+		If re_enable_wifi= is set to 'n', accesspopup will still do checks every 2 minutes but will only assess the wifi connection status when Wifi has been enabled by other means on the system.
+	ver 0.8-8 06 Oct 2024
+		The AccessPoint would disconnect from connected devices for some users. This is caused by wifi power saving mode. The power saving has been switched off for the AccessPopup profile. 
+	ver 0.8-7 10 Sep 2024
+		If the AP profile is invalid for for some reason it will be deleted and recreated. On creation it was activated before the IP address is changed.
+		The device is brought down until the ip has been changed and then activated. 
 	ver 0.8-6 12 Jul 2024
 		Some users reporting that while using a phone, they are unable to connect to the AP running on a RaspberryPi Zero W with PiOS Bookworm 32bit. Removing the AccessPopup profiles security group and strict encryption references from the 
 		config file solves the issue. These are automatically set by nmcli on creation of the profile in addition to how the Network Manager GUI creates the profile.
