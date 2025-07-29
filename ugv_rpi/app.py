@@ -44,7 +44,7 @@ import time
 import logging
 import logging
 import cv_ctrl
-import audio_ctrl
+# import audio_ctrl
 import os_info
 
 # Get system info
@@ -148,7 +148,7 @@ def generate_frames():
 # Route to render the HTML template
 @app.route('/')
 def index():
-    audio_ctrl.play_random_audio("connected", False)
+    # audio_ctrl.play_random_audio("connected", False)
     return render_template('index.html')
 
 @app.route('/config')
@@ -280,11 +280,14 @@ def cmdline_ctrl(args_string):
 
     elif args[0] == 'audio':
         if args[1] == '-s' or args[1] == '--say':
-            audio_ctrl.play_speech_thread(' '.join(args[2:]))
+            # audio_ctrl.play_speech_thread(' '.join(args[2:]))
+            pass
         elif args[1] == '-v' or args[1] == '--volume':
-            audio_ctrl.set_audio_volume(args[2])
+            # audio_ctrl.set_audio_volume(args[2])
+            pass
         elif args[1] == '-p' or args[1] == '--play_file':
-            audio_ctrl.play_file(args[2])
+            # audio_ctrl.play_file(args[2])
+            pass
 
     elif args[0] == 'send':
         if args[1] == '-a' or args[1] == '--add':
@@ -459,12 +462,12 @@ def upload_audio():
 def play_audio():
     audio_file = request.form['audio_file']
     print(thisPath + '/sounds/others/' + audio_file)
-    audio_ctrl.play_audio_thread(thisPath + '/sounds/others/' + audio_file)
+    # audio_ctrl.play_audio_thread(thisPath + '/sounds/others/' + audio_file)
     return jsonify({'success': 'Audio is playing'})
 
 @app.route('/stop_audio', methods=['POST'])
 def audio_stop():
-    audio_ctrl.stop()
+    # audio_ctrl.stop()
     return jsonify({'success': 'Audio stop'})
 
 @app.route('/settings/<path:filename>')
@@ -591,7 +594,7 @@ if __name__ == "__main__":
     base.lights_ctrl(255, 255)
     
     # play a audio file in /sounds/robot_started/
-    audio_ctrl.play_random_audio("robot_started", False)
+    # audio_ctrl.play_random_audio("robot_started", False)
 
     # update the size of videos and pictures
     si.update_folder(thisPath)

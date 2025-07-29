@@ -129,24 +129,24 @@ void setup() {
   webCtrlServer();
 
 
-  ServoMiddlePWM[0] = 368;
-  ServoMiddlePWM[1] = 623;
-  ServoMiddlePWM[2] = 521;
-  ServoMiddlePWM[3] = 495;
+  // ServoMiddlePWM[0] = 368;
+  // ServoMiddlePWM[1] = 623;
+  // ServoMiddlePWM[2] = 521;
+  // ServoMiddlePWM[3] = 495;
 
-  ServoMiddlePWM[4] = 364;
-  ServoMiddlePWM[5] = 672;
-  ServoMiddlePWM[6] = 665;
-  ServoMiddlePWM[7] = 417;
+  // ServoMiddlePWM[4] = 364;
+  // ServoMiddlePWM[5] = 672;
+  // ServoMiddlePWM[6] = 665;
+  // ServoMiddlePWM[7] = 417;
 
-  ServoMiddlePWM[8] = 497;
-  ServoMiddlePWM[9] = 529;
-  ServoMiddlePWM[10] = 654;
-  ServoMiddlePWM[11] = 374;
+  // ServoMiddlePWM[8] = 497;
+  // ServoMiddlePWM[9] = 529;
+  // ServoMiddlePWM[10] = 654;
+  // ServoMiddlePWM[11] = 374;
 
-  // {"T":105,"set":[368,623,521,495,364,672,665,417,497,529,654,374]}
+  // // {"T":105,"set":[368,623,521,495,364,672,665,417,497,529,654,374]}
 
-  bodyCtrl.setJointsZeroPosArray(ServoMiddlePWM);
+  // bodyCtrl.setJointsZeroPosArray(ServoMiddlePWM);
 }
 
 
